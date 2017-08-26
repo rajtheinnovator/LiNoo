@@ -1,4 +1,4 @@
-package com.enpassio.linoo.adapters;
+package com.enpassio1.linoo.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.enpassio.linoo.R;
-import com.enpassio.linoo.models.UpcomingDrives;
+import com.enpassio1.linoo.R;
+import com.enpassio1.linoo.models.UpcomingDrives;
 
 import java.util.ArrayList;
 
@@ -18,9 +18,9 @@ import java.util.ArrayList;
 
 public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHiresListAdapter.ViewHolder> {
 
+    private static ArrayList<UpcomingDrives> mUpcomingDrivesArrayList;
     /* Store the context for easy access */
     private Context mContext;
-    private static ArrayList<UpcomingDrives> mUpcomingDrivesArrayList;
     private UpcomingDrives mUpcomingDrives;
 
     /* Pass in the drives array into the constructor */

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.enpassio.linoo.activities.HiringListActivity"
+    tools:context="com.enpassio1.linoo.activities.HiringListActivity"
     tools:showIn="@layout/activity_main">
 
     <TextView
@@ -41,9 +41,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
+                android:layout_marginBottom="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginTop="8dp" />
         </RelativeLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 

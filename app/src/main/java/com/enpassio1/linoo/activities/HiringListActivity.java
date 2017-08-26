@@ -1,4 +1,4 @@
-package com.enpassio.linoo.activities;
+package com.enpassio1.linoo.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.enpassio.linoo.R;
-import com.enpassio.linoo.adapters.UpcomingHiresListAdapter;
-import com.enpassio.linoo.models.UpcomingDrives;
+import com.enpassio1.linoo.R;
+import com.enpassio1.linoo.adapters.UpcomingHiresListAdapter;
+import com.enpassio1.linoo.models.UpcomingDrives;
 
 import java.util.ArrayList;
 
