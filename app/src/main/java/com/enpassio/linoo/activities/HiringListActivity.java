@@ -1,8 +1,8 @@
-package com.enpassio.linoo;
+package com.enpassio.linoo.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,12 +10,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.enpassio.linoo.R;
 import com.enpassio.linoo.adapters.UpcomingHiresListAdapter;
 import com.enpassio.linoo.models.UpcomingDrives;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class HiringListActivity extends AppCompatActivity {
 
     RecyclerView drivesListRecyclerView;
     LinearLayoutManager drivesListLinearLayoutManager;
@@ -34,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent publishNewOpeningIntent = new Intent(HiringListActivity.this, PublishNewOpeningActivity.class);
+                startActivity(publishNewOpeningIntent);
             }
         });
 
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         drivesListRecyclerView.setLayoutManager(drivesListLinearLayoutManager);
 
         //adding data for testing purposes
-        
+
         upcomingDrivesArrayList.add(new UpcomingDrives("21/01/2017", "details details"));
         upcomingDrivesArrayList.add(new UpcomingDrives("21/01/2017", "details details"));
         upcomingDrivesArrayList.add(new UpcomingDrives("21/01/2017", "details details"));
