@@ -1,6 +1,8 @@
 package com.enpassio1.linoo.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.enpassio1.linoo.R;
+import com.enpassio1.linoo.activities.DriveDetailsActivity;
 import com.enpassio1.linoo.models.UpcomingDrives;
 
 import java.util.ArrayList;
@@ -110,7 +113,11 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
                 UpcomingDrives currentUpcomingDrives = mUpcomingDrivesArrayList.get(position);
                 /* We can access the data within the views */
 
-                // Intent drivesDetailIntent = new Intent(context, DriveDetailsActivity.class);
+                Intent drivesDetailIntent = new Intent(context, DriveDetailsActivity.class);
+                Bundle driveDetailsBundle = new Bundle();
+                driveDetailsBundle.putParcelable("currentUpcomingDrives", currentUpcomingDrives);
+                drivesDetailIntent.putExtra("driveDetailsBundle", driveDetailsBundle);
+                context.startActivity(drivesDetailIntent);
 
 
             }

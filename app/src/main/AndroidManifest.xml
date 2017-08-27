@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.enpassio1.linoo.activities.HiringListActivity"
+            android:name=".activities.HiringListActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -19,7 +19,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.enpassio1.linoo.activities.PublishNewOpeningActivity"></activity>
+        <activity
+            android:name=".activities.PublishNewOpeningActivity"
+            android:parentActivityName=".activities.HiringListActivity" />
+        <activity
+            android:name=".activities.DriveDetailsActivity"
+            android:parentActivityName=".activities.HiringListActivity" />
     </application>
 
 </manifest>
