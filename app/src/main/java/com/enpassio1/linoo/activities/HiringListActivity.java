@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +14,11 @@ import android.view.View;
 import com.enpassio1.linoo.R;
 import com.enpassio1.linoo.adapters.UpcomingHiresListAdapter;
 import com.enpassio1.linoo.models.UpcomingDrives;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -22,6 +28,9 @@ public class HiringListActivity extends AppCompatActivity {
     LinearLayoutManager drivesListLinearLayoutManager;
     UpcomingHiresListAdapter upcomingHiresListAdapter;
     ArrayList<UpcomingDrives> upcomingDrivesArrayList;
+    private ChildEventListener mChildEventListener;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mDrivesDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +59,40 @@ public class HiringListActivity extends AppCompatActivity {
 
         //adding data for testing purposes
 
-        upcomingDrivesArrayList.add(new UpcomingDrives("21/01/2017", "details details"));
-        upcomingDrivesArrayList.add(new UpcomingDrives("21/01/2017", "details details"));
-        upcomingDrivesArrayList.add(new UpcomingDrives("21/01/2017", "details details"));
-
-
         upcomingHiresListAdapter = new UpcomingHiresListAdapter(this, upcomingDrivesArrayList);
         drivesListRecyclerView.setAdapter(upcomingHiresListAdapter);
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDrivesDatabaseReference = mFirebaseDatabase.getReference().child("drives");
+        mChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                UpcomingDrives upcomingDrive = dataSnapshot.getValue(UpcomingDrives.class);
+                upcomingDrivesArrayList.add(upcomingDrive);
+                upcomingHiresListAdapter.setDriveData(upcomingDrivesArrayList);
+                Log.v("my_tag", "name is: " + upcomingDrive.getCompanyName());
+                Log.v("my_tag", "date is: " + upcomingDrive.getDriveDate());
+                Log.v("my_tag", "place is: " + upcomingDrive.getPlace());
+                Log.v("my_tag", "position is: " + upcomingDrive.getJobPosition());
+                Log.v("my_tag", "description is: " + upcomingDrive.getDetailedDescription());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        mDrivesDatabaseReference.addChildEventListener(mChildEventListener);
     }
 
     @Override

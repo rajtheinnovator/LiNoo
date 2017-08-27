@@ -8,9 +8,72 @@ import android.os.Parcelable;
  */
 
 //parcelable created using: http://www.parcelabler.com/
-
 public class UpcomingDrives implements Parcelable {
-    @SuppressWarnings("unused")
+    private String mDriveDate;
+    private String mPlace;
+    private String mDetailedDescription;
+    private String mJobPosition;
+    private String mCompanyName;
+
+    public UpcomingDrives() {
+        //required empty constructor, as Firebase was complaining about this being not present
+    }
+
+    public UpcomingDrives(String companyName, String driveDate, String place, String position, String detailedDescription) {
+        mCompanyName = companyName;
+        mDriveDate = driveDate;
+        mPlace = place;
+        mDetailedDescription = detailedDescription;
+        mJobPosition = position;
+    }
+
+    public String getDriveDate() {
+        return mDriveDate;
+    }
+
+    public String getPlace() {
+        return mPlace;
+    }
+
+    public String getDetailedDescription() {
+        return mDetailedDescription;
+    }
+
+    public String getJobPosition() {
+        return mJobPosition;
+    }
+
+    public String getCompanyName() {
+        return mCompanyName;
+    }
+
+
+    protected UpcomingDrives(Parcel in) {
+        mDriveDate = in.readString();
+        mPlace = in.readString();
+        mDetailedDescription = in.readString();
+        mJobPosition = in.readString();
+        mCompanyName = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mDriveDate);
+        dest.writeString(mPlace);
+        dest.writeString(mDetailedDescription);
+        dest.writeString(mJobPosition);
+        dest.writeString(mCompanyName);
+    }    @SuppressWarnings("unused")
     public static final Parcelable.Creator<UpcomingDrives> CREATOR = new Parcelable.Creator<UpcomingDrives>() {
         @Override
         public UpcomingDrives createFromParcel(Parcel in) {
@@ -22,47 +85,4 @@ public class UpcomingDrives implements Parcelable {
             return new UpcomingDrives[size];
         }
     };
-    private String mDriveDate;
-    private String mDriveSummary;
-    private String mPlace;
-    private String mDetailedDescription;
-    private String mJobPosition;
-
-    protected UpcomingDrives(Parcel in) {
-        mDriveDate = in.readString();
-        mDriveSummary = in.readString();
-    }
-    public UpcomingDrives(String driveDate, String driveSummary) {
-        mDriveDate = driveDate;
-        mDriveSummary = driveSummary;
-
-    }
-
-    public UpcomingDrives(String driveDate, String driveSummary, String place, String position, String detailedDescription) {
-        mDriveDate = driveDate;
-        mDriveSummary = driveSummary;
-        mPlace = place;
-        mDetailedDescription = detailedDescription;
-        mJobPosition = position;
-
-    }
-
-    public String getDriveDate() {
-        return mDriveDate;
-    }
-
-    public String getDriveSummary() {
-        return mDriveSummary;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mDriveDate);
-        dest.writeString(mDriveSummary);
-    }
 }

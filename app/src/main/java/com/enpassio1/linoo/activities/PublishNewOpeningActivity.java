@@ -8,7 +8,6 @@ import android.widget.EditText;
 
 import com.enpassio1.linoo.R;
 import com.enpassio1.linoo.models.UpcomingDrives;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -21,12 +20,15 @@ public class PublishNewOpeningActivity extends AppCompatActivity {
     EditText jobDescriptionEditText;
     Button publishButton;
 
-    // Firebase instance variables
-    //firebase code referenced from: https://github.com/udacity/and-nd-firebase
+    /*
+    * Firebase instance variables
+    **/
+    /*
+    * firebase code referenced from: https://github.com/udacity/and-nd-firebase
+    */
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDrivesDatabaseReference;
-    private ChildEventListener mChildEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +48,15 @@ public class PublishNewOpeningActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String companyName = companyNameEditText.getText().toString().trim();
-                String recruitmentDate = companyNameEditText.getText().toString().trim();
-                String recruitmentPlace = companyNameEditText.getText().toString().trim();
-                String jobPosition = companyNameEditText.getText().toString().trim();
-                String driveDetails = companyNameEditText.getText().toString().trim();
+                String recruitmentDate = hiringDateEditText.getText().toString().trim();
+                String recruitmentPlace = hiringPlaceEditText.getText().toString().trim();
+                String jobPosition = jobPositionEditText.getText().toString().trim();
+                String driveDetails = jobDescriptionEditText.getText().toString().trim();
                 UpcomingDrives upcomingDrives = new UpcomingDrives(companyName, recruitmentDate,
                         recruitmentPlace, jobPosition, driveDetails);
                 mDrivesDatabaseReference.push().setValue(upcomingDrives);
 
-                // Clear input box
+                /* Clear input field */
                 companyNameEditText.setText("");
                 hiringDateEditText.setText("");
                 hiringPlaceEditText.setText("");
@@ -62,7 +64,5 @@ public class PublishNewOpeningActivity extends AppCompatActivity {
                 jobDescriptionEditText.setText("");
             }
         });
-
-
     }
 }

@@ -55,7 +55,7 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
         Set item views based on your views and data model
          */
         viewHolder.hiringDateTextView.setText(currentDrives.getDriveDate());
-        viewHolder.hiringSummaryTextView.setText(currentDrives.getDriveSummary());
+        viewHolder.hiringSummaryTextView.setText(currentDrives.getDetailedDescription());
     }
 
     @Override
