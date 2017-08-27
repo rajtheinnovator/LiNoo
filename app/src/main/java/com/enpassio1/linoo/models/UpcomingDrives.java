@@ -1,17 +1,31 @@
 package com.enpassio1.linoo.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by ABHISHEK RAJ on 8/26/2017.
  */
 
 //parcelable created using: http://www.parcelabler.com/
-public class UpcomingDrives {
+public class UpcomingDrives implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<UpcomingDrives> CREATOR = new Parcelable.Creator<UpcomingDrives>() {
+        @Override
+        public UpcomingDrives createFromParcel(Parcel in) {
+            return new UpcomingDrives(in);
+        }
+
+        @Override
+        public UpcomingDrives[] newArray(int size) {
+            return new UpcomingDrives[size];
+        }
+    };
     private String driveDate;
     private String place;
     private String detailedDescription;
     private String jobPosition;
     private String companyName;
-
 
     public UpcomingDrives() {
         //required empty constructor, as Firebase was complaining about this being not present
@@ -21,8 +35,16 @@ public class UpcomingDrives {
         companyName = name;
         driveDate = date;
         place = location;
-        detailedDescription = description;
+        description = description;
         jobPosition = jobTitle;
+    }
+
+    protected UpcomingDrives(Parcel in) {
+        driveDate = in.readString();
+        place = in.readString();
+        detailedDescription = in.readString();
+        jobPosition = in.readString();
+        companyName = in.readString();
     }
 
     public String getDriveDate() {
@@ -45,5 +67,17 @@ public class UpcomingDrives {
         return companyName;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(driveDate);
+        dest.writeString(place);
+        dest.writeString(detailedDescription);
+        dest.writeString(jobPosition);
+        dest.writeString(companyName);
+    }
 }
