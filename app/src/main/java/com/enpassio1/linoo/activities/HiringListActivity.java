@@ -1,12 +1,15 @@
 package com.enpassio1.linoo.activities;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 
@@ -37,6 +41,9 @@ public class HiringListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //code below referenced from: https://firebase.google.com/docs/cloud-messaging/android/send-multiple
+
+        FirebaseMessaging.getInstance().subscribeToTopic("drives");
         if (savedInstanceState == null) {
             upcomingDrivesArrayList = new ArrayList<UpcomingDrives>();
         }
@@ -69,11 +76,8 @@ public class HiringListActivity extends AppCompatActivity {
                 UpcomingDrives upcomingDrive = dataSnapshot.getValue(UpcomingDrives.class);
                 upcomingDrivesArrayList.add(upcomingDrive);
                 upcomingHiresListAdapter.setDriveData(upcomingDrivesArrayList);
-                Log.v("my_tag", "name is: " + upcomingDrive.getCompanyName());
-                Log.v("my_tag", "date is: " + upcomingDrive.getDriveDate());
-                Log.v("my_tag", "place is: " + upcomingDrive.getPlace());
-                Log.v("my_tag", "position is: " + upcomingDrive.getJobPosition());
-                Log.v("my_tag", "description is: " + upcomingDrive.getDetailedDescription());
+
+                createNotificationForNewUpcomingDrive(upcomingDrive);
             }
 
             @Override
@@ -93,6 +97,32 @@ public class HiringListActivity extends AppCompatActivity {
             }
         };
         mDrivesDatabaseReference.addChildEventListener(mChildEventListener);
+    }
+
+    private void createNotificationForNewUpcomingDrive(UpcomingDrives upcomingDrives) {
+        /*
+        code below referenced from: https://www.survivingwithandroid.com/2016/09/android-firebase-push-notification.html
+      
+        */
+        //  Create Notification
+        Intent intent = new Intent(this, HiringListActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1410,
+                intent, PendingIntent.FLAG_ONE_SHOT);
+
+        NotificationCompat.Builder notificationBuilder = new
+                NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Message")
+                .setContentText(upcomingDrives.getDetailedDescription())
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager)
+                        getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(1410, notificationBuilder.build());
     }
 
     @Override

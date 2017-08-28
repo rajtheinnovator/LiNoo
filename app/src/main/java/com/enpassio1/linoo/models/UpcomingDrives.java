@@ -35,7 +35,7 @@ public class UpcomingDrives implements Parcelable {
         companyName = name;
         driveDate = date;
         place = location;
-        description = description;
+        detailedDescription = description;
         jobPosition = jobTitle;
     }
 
