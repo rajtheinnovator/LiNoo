@@ -62,6 +62,7 @@ public class HiringListActivity extends AppCompatActivity {
         drivesListRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_upcoming_drive_list);
         drivesListLinearLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
+
         drivesListRecyclerView.setLayoutManager(drivesListLinearLayoutManager);
 
         //adding data for testing purposes
@@ -102,13 +103,13 @@ public class HiringListActivity extends AppCompatActivity {
     private void createNotificationForNewUpcomingDrive(UpcomingDrives upcomingDrives) {
         /*
         code below referenced from: https://www.survivingwithandroid.com/2016/09/android-firebase-push-notification.html
-      
+
         */
         //  Create Notification
         Intent intent = new Intent(this, HiringListActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1410,
-                intent, PendingIntent.FLAG_ONE_SHOT);
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder notificationBuilder = new
                 NotificationCompat.Builder(this)
@@ -117,6 +118,7 @@ public class HiringListActivity extends AppCompatActivity {
                 .setContentText(upcomingDrives.getDetailedDescription())
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
+
 
         NotificationManager notificationManager =
                 (NotificationManager)

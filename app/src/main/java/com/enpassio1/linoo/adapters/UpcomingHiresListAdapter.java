@@ -14,6 +14,7 @@ import com.enpassio1.linoo.activities.DriveDetailsActivity;
 import com.enpassio1.linoo.models.UpcomingDrives;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by ABHISHEK RAJ on 8/26/2017.
@@ -68,6 +69,10 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
 
     public void setDriveData(ArrayList<UpcomingDrives> upcomingDrivesArrayList) {
         mUpcomingDrivesArrayList = upcomingDrivesArrayList;
+
+        /* code below referenced from the link: https://stackoverflow.com/a/5412542/5770629 */
+        
+        Collections.reverse(mUpcomingDrivesArrayList);
         notifyDataSetChanged();
     }
 
