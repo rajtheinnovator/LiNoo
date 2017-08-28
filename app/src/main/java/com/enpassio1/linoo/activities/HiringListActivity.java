@@ -17,6 +17,7 @@ import android.view.View;
 import com.enpassio1.linoo.R;
 import com.enpassio1.linoo.adapters.UpcomingHiresListAdapter;
 import com.enpassio1.linoo.models.UpcomingDrives;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,11 +36,15 @@ public class HiringListActivity extends AppCompatActivity {
     private ChildEventListener mChildEventListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDrivesDatabaseReference;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        auth = FirebaseAuth.getInstance();
+
 
         //code below referenced from: https://firebase.google.com/docs/cloud-messaging/android/send-multiple
 
@@ -143,7 +148,10 @@ public class HiringListActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            auth.signOut();
+            upcomingHiresListAdapter.setDriveData(null);
+            startActivity(new Intent(HiringListActivity.this, SignInActivity.class));
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

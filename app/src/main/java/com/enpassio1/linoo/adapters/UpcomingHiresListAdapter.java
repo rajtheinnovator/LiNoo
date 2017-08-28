@@ -64,15 +64,20 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
 
     @Override
     public int getItemCount() {
-        return mUpcomingDrivesArrayList.size();
+        if (mUpcomingDrivesArrayList == null) {
+            return 0;
+        } else {
+            return mUpcomingDrivesArrayList.size();
+        }
     }
 
     public void setDriveData(ArrayList<UpcomingDrives> upcomingDrivesArrayList) {
         mUpcomingDrivesArrayList = upcomingDrivesArrayList;
 
         /* code below referenced from the link: https://stackoverflow.com/a/5412542/5770629 */
-        
-        Collections.reverse(mUpcomingDrivesArrayList);
+        if (mUpcomingDrivesArrayList != null) {
+            Collections.reverse(mUpcomingDrivesArrayList);
+        }
         notifyDataSetChanged();
     }
 
