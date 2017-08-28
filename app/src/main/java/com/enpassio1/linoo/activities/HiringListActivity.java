@@ -17,6 +17,7 @@ import android.view.View;
 import com.enpassio1.linoo.R;
 import com.enpassio1.linoo.adapters.UpcomingHiresListAdapter;
 import com.enpassio1.linoo.models.UpcomingDrives;
+import com.enpassio1.linoo.utils.NotificationUtilities;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -61,6 +62,7 @@ public class HiringListActivity extends AppCompatActivity {
             }
         });
 
+        NotificationUtilities.scheduleChargingReminder(HiringListActivity.this);
         /* code below referenced from my previous project at the following link:
         * https://github.com/rajtheinnovator/Project-2-ShowMyShow/
         */

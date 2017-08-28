@@ -28,6 +28,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.ResetPasswordActivity" />
+
+        <service
+            android:name=".sync.FirebaseDataFetchJobService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
