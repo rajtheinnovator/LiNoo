@@ -31,11 +31,11 @@ public class NotificationUtilities {
 
     private static boolean sInitialized;
 
-    // COMPLETED (16) Create a synchronized, public static method called scheduleChargingReminder that takes
+    // COMPLETED (16) Create a synchronized, public static method called scheduleNewDriveAddedReminder that takes
     // in a context. This method will use FirebaseJobDispatcher to schedule a job that repeats roughly
     // every REMINDER_INTERVAL_SECONDS when the phone is charging. It will trigger WaterReminderFirebaseJobService
     // Checkout https://github.com/firebase/firebase-jobdispatcher-android for an example
-    synchronized public static void scheduleChargingReminder(@NonNull final Context context) {
+    synchronized public static void scheduleNewDriveAddedReminder(@NonNull final Context context) {
 
 
         // COMPLETED (17) If the job has already been initialized, return

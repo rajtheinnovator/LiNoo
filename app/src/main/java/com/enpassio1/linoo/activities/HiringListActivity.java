@@ -48,8 +48,8 @@ public class HiringListActivity extends AppCompatActivity {
 
 
         //code below referenced from: https://firebase.google.com/docs/cloud-messaging/android/send-multiple
-
         FirebaseMessaging.getInstance().subscribeToTopic("drives");
+
         if (savedInstanceState == null) {
             upcomingDrivesArrayList = new ArrayList<UpcomingDrives>();
         }
@@ -62,7 +62,7 @@ public class HiringListActivity extends AppCompatActivity {
             }
         });
 
-        NotificationUtilities.scheduleChargingReminder(HiringListActivity.this);
+        NotificationUtilities.scheduleNewDriveAddedReminder(HiringListActivity.this);
         /* code below referenced from my previous project at the following link:
         * https://github.com/rajtheinnovator/Project-2-ShowMyShow/
         */
@@ -110,7 +110,6 @@ public class HiringListActivity extends AppCompatActivity {
     private void createNotificationForNewUpcomingDrive(UpcomingDrives upcomingDrives) {
         /*
         code below referenced from: https://www.survivingwithandroid.com/2016/09/android-firebase-push-notification.html
-
         */
         //  Create Notification
         Intent intent = new Intent(this, HiringListActivity.class);
