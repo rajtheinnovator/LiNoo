@@ -65,7 +65,7 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
         notificationManager =
                 (NotificationManager)
                         getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancelAll();
+
 
         //code below referenced from: https://firebase.google.com/docs/cloud-messaging/android/send-multiple
         FirebaseMessaging.getInstance().subscribeToTopic("drives");
@@ -151,6 +151,15 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
                     upcomingDrivesArrayList.add(upcomingDrive);
                     upcomingHiresListAdapter.setDriveData(upcomingDrivesArrayList);
                     createNotificationForNewUpcomingDrive(upcomingDrive);
+
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(DriveEntry.COLUMN_COMPANY_NAME, upcomingDrive.getCompanyName());
+                    contentValues.put(DriveEntry.COLUMN_DRIVE_DATE, upcomingDrive.getDriveDate());
+                    contentValues.put(DriveEntry.COLUMN_DRIVE_LOCATION, upcomingDrive.getPlace());
+                    contentValues.put(DriveEntry.COLUMN_JOB_POSITION, upcomingDrive.getJobPosition());
+                    contentValues.put(DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
+                    contentValues.put(DriveEntry.COLUMN_DRIVE_KEY, dataSnapshot.getKey());
+                    Uri uri = getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
                 }
 
                 @Override
@@ -169,6 +178,7 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
                 public void onCancelled(DatabaseError databaseError) {
                 }
             };
+
             NotificationUtilities.scheduleNewDriveAddedReminder(HiringListActivity.this);
             mDrivesDatabaseReference.addChildEventListener(mChildEventListener);
         }
@@ -269,6 +279,7 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
                 }
             }
         }
+        notificationManager.cancelAll();
         upcomingHiresListAdapter.setDriveData(mUpcomingDrivesArrayList);
     }
 

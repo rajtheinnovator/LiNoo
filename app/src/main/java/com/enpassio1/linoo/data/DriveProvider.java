@@ -164,7 +164,7 @@ public class DriveProvider extends ContentProvider {
         }
         String driveKey = values.getAsString(DriveEntry.COLUMN_DRIVE_KEY);
         if (driveKey == null) {
-            throw new IllegalArgumentException("Drive requires valid job description");
+            throw new IllegalArgumentException("Drive requires valid drive key");
         }
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();

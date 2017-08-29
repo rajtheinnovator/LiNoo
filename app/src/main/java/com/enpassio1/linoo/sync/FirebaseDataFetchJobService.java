@@ -2,7 +2,6 @@ package com.enpassio1.linoo.sync;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 
@@ -62,24 +61,23 @@ public class FirebaseDataFetchJobService extends JobService {
                         // Is better to use a List, because you don't know the size
                         // of the iterator returned by dataSnapshot.getChildren() to
                         // initialize the array
-
+                        int rowsDeleted = getContentResolver().delete(DriveContract.DriveEntry.CONTENT_URI, null, null);
                         for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
                             UpcomingDrives upcomingDrive = areaSnapshot.getValue(UpcomingDrives.class);
 
                             //code below referenced from: https://stackoverflow.com/a/6233664/5770629
 
-                            Cursor cursor = getContentResolver().query(DriveContract.DriveEntry.CONTENT_URI, null, DriveContract.DriveEntry.COLUMN_DRIVE_KEY + "=" + areaSnapshot.getKey(), null, null);
-                            if (cursor.getCount() == 0) {
-                                //as this data doesn't exist, so write that in, into the SQLite database
 
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put(DriveContract.DriveEntry.COLUMN_COMPANY_NAME, upcomingDrive.getCompanyName());
-                                contentValues.put(DriveContract.DriveEntry.COLUMN_DRIVE_DATE, upcomingDrive.getDriveDate());
-                                contentValues.put(DriveContract.DriveEntry.COLUMN_DRIVE_LOCATION, upcomingDrive.getPlace());
-                                contentValues.put(DriveContract.DriveEntry.COLUMN_JOB_POSITION, upcomingDrive.getJobPosition());
-                                contentValues.put(DriveContract.DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
-                                Uri uri = getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
-                            }
+                            //as this data doesn't exist, so write that in, into the SQLite database
+
+                            ContentValues contentValues = new ContentValues();
+                            contentValues.put(DriveContract.DriveEntry.COLUMN_COMPANY_NAME, upcomingDrive.getCompanyName());
+                            contentValues.put(DriveContract.DriveEntry.COLUMN_DRIVE_DATE, upcomingDrive.getDriveDate());
+                            contentValues.put(DriveContract.DriveEntry.COLUMN_DRIVE_LOCATION, upcomingDrive.getPlace());
+                            contentValues.put(DriveContract.DriveEntry.COLUMN_JOB_POSITION, upcomingDrive.getJobPosition());
+                            contentValues.put(DriveContract.DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
+                            contentValues.put(DriveContract.DriveEntry.COLUMN_DRIVE_KEY, areaSnapshot.getKey());
+                            Uri uri = getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
 
                         }
                     }
