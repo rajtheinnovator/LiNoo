@@ -1,9 +1,12 @@
 package com.enpassio1.linoo.sync;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
+import com.enpassio1.linoo.data.DriveContract;
 import com.enpassio1.linoo.models.UpcomingDrives;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
@@ -12,8 +15,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 /**
  * Created by ABHISHEK RAJ on 8/29/2017.
@@ -54,22 +55,32 @@ public class FirebaseDataFetchJobService extends JobService {
 
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("drives");
 
-                Log.v("my_tag", "JOB started");
                 /* code below referenced from: https://stackoverflow.com/a/38493214/5770629 */
-
                 databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.v("my_tag", "onDataChange called");
                         // Is better to use a List, because you don't know the size
                         // of the iterator returned by dataSnapshot.getChildren() to
                         // initialize the array
-                        final ArrayList<UpcomingDrives> upcomingDrivesArrayList = new ArrayList<UpcomingDrives>();
+
                         for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
-                            UpcomingDrives upcomingDrives = areaSnapshot.getValue(UpcomingDrives.class);
-                            Log.v("my_tag", "company name is: " + upcomingDrives.getCompanyName());
-                            Log.v("my_tag", "hiring date is: " + upcomingDrives.getDriveDate());
-                            upcomingDrivesArrayList.add(upcomingDrives);
+                            UpcomingDrives upcomingDrive = areaSnapshot.getValue(UpcomingDrives.class);
+
+                            //code below referenced from: https://stackoverflow.com/a/6233664/5770629
+
+                            Cursor cursor = getContentResolver().query(DriveContract.DriveEntry.CONTENT_URI, null, DriveContract.DriveEntry.COLUMN_DRIVE_KEY + "=" + areaSnapshot.getKey(), null, null);
+                            if (cursor.getCount() == 0) {
+                                //as this data doesn't exist, so write that in, into the SQLite database
+
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put(DriveContract.DriveEntry.COLUMN_COMPANY_NAME, upcomingDrive.getCompanyName());
+                                contentValues.put(DriveContract.DriveEntry.COLUMN_DRIVE_DATE, upcomingDrive.getDriveDate());
+                                contentValues.put(DriveContract.DriveEntry.COLUMN_DRIVE_LOCATION, upcomingDrive.getPlace());
+                                contentValues.put(DriveContract.DriveEntry.COLUMN_JOB_POSITION, upcomingDrive.getJobPosition());
+                                contentValues.put(DriveContract.DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
+                                Uri uri = getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
+                            }
+
                         }
                     }
 
