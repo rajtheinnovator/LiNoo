@@ -47,6 +47,7 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
     LinearLayoutManager drivesListLinearLayoutManager;
     UpcomingHiresListAdapter upcomingHiresListAdapter;
     ArrayList<UpcomingDrives> upcomingDrivesArrayList;
+    NotificationManager notificationManager;
     private ChildEventListener mChildEventListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDrivesDatabaseReference;
@@ -60,6 +61,11 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
 
         auth = FirebaseAuth.getInstance();
 
+
+        notificationManager =
+                (NotificationManager)
+                        getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
 
         //code below referenced from: https://firebase.google.com/docs/cloud-messaging/android/send-multiple
         FirebaseMessaging.getInstance().subscribeToTopic("drives");
@@ -144,7 +150,6 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
                     UpcomingDrives upcomingDrive = dataSnapshot.getValue(UpcomingDrives.class);
                     upcomingDrivesArrayList.add(upcomingDrive);
                     upcomingHiresListAdapter.setDriveData(upcomingDrivesArrayList);
-
                     createNotificationForNewUpcomingDrive(upcomingDrive);
                 }
 
@@ -190,10 +195,6 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
 
-
-        NotificationManager notificationManager =
-                (NotificationManager)
-                        getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(1410, notificationBuilder.build());
     }
