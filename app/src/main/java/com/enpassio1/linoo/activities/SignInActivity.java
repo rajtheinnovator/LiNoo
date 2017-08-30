@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.enpassio1.linoo.R;
+import com.enpassio1.linoo.utils.InternetConnectivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -71,24 +72,29 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    progressBar.setVisibility(View.GONE);
-                                    startActivity(new Intent(SignInActivity.this, HiringListActivity.class));
-                                    finish();
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(SignInActivity.this, getResources()
-                                                    .getString(R.string.toast_authentication_failed),
-                                            Toast.LENGTH_SHORT).show();
+                if (InternetConnectivity.isInternetConnected(SignInActivity.this)) {
+                    mAuth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        progressBar.setVisibility(View.GONE);
+                                        startActivity(new Intent(SignInActivity.this, HiringListActivity.class));
+                                        finish();
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Toast.makeText(SignInActivity.this, getResources()
+                                                        .getString(R.string.toast_authentication_failed),
+                                                Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                } else {
+                    Toast.makeText(SignInActivity.this, getResources()
+                            .getString(R.string.check_internet_connectivity), Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.reset_password:
                 startActivity(new Intent(SignInActivity.this, ResetPasswordActivity.class));

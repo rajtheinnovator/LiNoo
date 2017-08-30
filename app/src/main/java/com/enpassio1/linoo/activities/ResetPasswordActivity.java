@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.enpassio1.linoo.R;
+import com.enpassio1.linoo.utils.InternetConnectivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -70,22 +71,27 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
-                mAuth.sendPasswordResetEmail(email)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    emailEditText.setText("");
-                                    Toast.makeText(ResetPasswordActivity.this, getResources()
-                                            .getString(R.string.toast_password_reset_instruction_sent), Toast.LENGTH_SHORT).show();
-                                    progressBar.setVisibility(View.GONE);
-                                    startActivity(new Intent(ResetPasswordActivity.this, SignInActivity.class));
-                                    finish();
-                                } else {
-                                    emailEditText.setError(getResources().getString(R.string.error_email_not_registered));
+                if (InternetConnectivity.isInternetConnected(ResetPasswordActivity.this)) {
+                    mAuth.sendPasswordResetEmail(email)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        emailEditText.setText("");
+                                        Toast.makeText(ResetPasswordActivity.this, getResources()
+                                                .getString(R.string.toast_password_reset_instruction_sent), Toast.LENGTH_SHORT).show();
+                                        progressBar.setVisibility(View.GONE);
+                                        startActivity(new Intent(ResetPasswordActivity.this, SignInActivity.class));
+                                        finish();
+                                    } else {
+                                        emailEditText.setError(getResources().getString(R.string.error_email_not_registered));
+                                    }
                                 }
-                            }
-                        });
+                            });
+                } else {
+                    Toast.makeText(ResetPasswordActivity.this, getResources()
+                            .getString(R.string.check_internet_connectivity), Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.sign_up_button:
                 startActivity(new Intent(ResetPasswordActivity.this, SignupActivity.class));

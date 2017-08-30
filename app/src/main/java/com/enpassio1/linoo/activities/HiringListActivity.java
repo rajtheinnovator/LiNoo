@@ -20,12 +20,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.enpassio1.linoo.R;
 import com.enpassio1.linoo.adapters.UpcomingHiresListAdapter;
 import com.enpassio1.linoo.data.DriveContract;
 import com.enpassio1.linoo.data.DriveContract.DriveEntry;
 import com.enpassio1.linoo.models.UpcomingDrives;
+import com.enpassio1.linoo.utils.InternetConnectivity;
 import com.enpassio1.linoo.utils.NotificationUtilities;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -97,28 +99,62 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
 
         upcomingHiresListAdapter = new UpcomingHiresListAdapter(this, upcomingDrivesArrayList);
         drivesListRecyclerView.setAdapter(upcomingHiresListAdapter);
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDrivesDatabaseReference = mFirebaseDatabase.getReference().child(getResources()
-                .getString(R.string.firebase_database_child_drives));
+        if (InternetConnectivity.isInternetConnected(HiringListActivity.this)) {
+            mFirebaseDatabase = FirebaseDatabase.getInstance();
+            mDrivesDatabaseReference = mFirebaseDatabase.getReference().child(getResources()
+                    .getString(R.string.firebase_database_child_drives));
 
      /* code below referenced from: https://developer.android.com/training/basics/data-storage/shared-preferences.html */
 
-        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-        if (!sharedPreferences.contains(getResources().getString(R.string.shared_preference_key))) {
+            SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+            if (!sharedPreferences.contains(getResources().getString(R.string.shared_preference_key))) {
 
-            //that means, the app is getting started for the first time
-            //so, load directly from the firebase database
+                //that means, the app is getting started for the first time
+                //so, load directly from the firebase database
 
             /* code below referenced from: https://stackoverflow.com/a/38493214/5770629 */
 
-            mDrivesDatabaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // Is better to use a List, because you don't know the size
-                    // of the iterator returned by dataSnapshot.getChildren() to
-                    // initialize the array
-                    for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
-                        UpcomingDrives upcomingDrive = areaSnapshot.getValue(UpcomingDrives.class);
+                mDrivesDatabaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Is better to use a List, because you don't know the size
+                        // of the iterator returned by dataSnapshot.getChildren() to
+                        // initialize the array
+                        for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
+                            UpcomingDrives upcomingDrive = areaSnapshot.getValue(UpcomingDrives.class);
+
+                            ContentValues contentValues = new ContentValues();
+                            contentValues.put(DriveEntry.COLUMN_COMPANY_NAME, upcomingDrive.getCompanyName());
+                            contentValues.put(DriveEntry.COLUMN_DRIVE_DATE, upcomingDrive.getDriveDate());
+                            contentValues.put(DriveEntry.COLUMN_DRIVE_LOCATION, upcomingDrive.getPlace());
+                            contentValues.put(DriveEntry.COLUMN_JOB_POSITION, upcomingDrive.getJobPosition());
+                            contentValues.put(DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
+                            contentValues.put(DriveEntry.COLUMN_DRIVE_KEY, areaSnapshot.getKey());
+                            Uri uri = getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
+
+                            upcomingDrivesArrayList.add(upcomingDrive);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            /* code below referenced from: https://developer.android.com/training/basics/data-storage/shared-preferences.html */
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(getResources().getString(R.string.shared_preference_key),
+                        getResources().getString(R.string.shared_preference_value));
+                editor.apply();
+            } else {
+                mChildEventListener = new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        UpcomingDrives upcomingDrive = dataSnapshot.getValue(UpcomingDrives.class);
+                        upcomingDrivesArrayList.add(upcomingDrive);
+                        upcomingHiresListAdapter.setDriveData(upcomingDrivesArrayList);
+                        createNotificationForNewUpcomingDrive(upcomingDrive);
 
                         ContentValues contentValues = new ContentValues();
                         contentValues.put(DriveEntry.COLUMN_COMPANY_NAME, upcomingDrive.getCompanyName());
@@ -126,64 +162,34 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
                         contentValues.put(DriveEntry.COLUMN_DRIVE_LOCATION, upcomingDrive.getPlace());
                         contentValues.put(DriveEntry.COLUMN_JOB_POSITION, upcomingDrive.getJobPosition());
                         contentValues.put(DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
-                        contentValues.put(DriveEntry.COLUMN_DRIVE_KEY, areaSnapshot.getKey());
+                        contentValues.put(DriveEntry.COLUMN_DRIVE_KEY, dataSnapshot.getKey());
                         Uri uri = getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
-
-                        upcomingDrivesArrayList.add(upcomingDrive);
                     }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    }
 
-                }
-            });
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    }
 
-            /* code below referenced from: https://developer.android.com/training/basics/data-storage/shared-preferences.html */
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(getResources().getString(R.string.shared_preference_key),
-                    getResources().getString(R.string.shared_preference_value));
-            editor.apply();
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                };
+
+                NotificationUtilities.scheduleNewDriveAddedReminder(HiringListActivity.this);
+                mDrivesDatabaseReference.addChildEventListener(mChildEventListener);
+            }
         } else {
-            mChildEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    UpcomingDrives upcomingDrive = dataSnapshot.getValue(UpcomingDrives.class);
-                    upcomingDrivesArrayList.add(upcomingDrive);
-                    upcomingHiresListAdapter.setDriveData(upcomingDrivesArrayList);
-                    createNotificationForNewUpcomingDrive(upcomingDrive);
-
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put(DriveEntry.COLUMN_COMPANY_NAME, upcomingDrive.getCompanyName());
-                    contentValues.put(DriveEntry.COLUMN_DRIVE_DATE, upcomingDrive.getDriveDate());
-                    contentValues.put(DriveEntry.COLUMN_DRIVE_LOCATION, upcomingDrive.getPlace());
-                    contentValues.put(DriveEntry.COLUMN_JOB_POSITION, upcomingDrive.getJobPosition());
-                    contentValues.put(DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
-                    contentValues.put(DriveEntry.COLUMN_DRIVE_KEY, dataSnapshot.getKey());
-                    Uri uri = getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            };
-
-            NotificationUtilities.scheduleNewDriveAddedReminder(HiringListActivity.this);
-            mDrivesDatabaseReference.addChildEventListener(mChildEventListener);
+            Toast.makeText(HiringListActivity.this, getResources()
+                    .getString(R.string.check_internet_connectivity), Toast.LENGTH_SHORT).show();
         }
-
         //finally, start the loader and load data from it
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
