@@ -66,7 +66,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
             case R.id.reset_password:
                 String email = emailEditText.getText().toString().trim();
                 if (TextUtils.isEmpty(email)) {
-                    emailEditText.setError("Enter a valid email");
+                    emailEditText.setError(getResources().getString(R.string.error_enter_valid_email));
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
@@ -76,13 +76,13 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     emailEditText.setText("");
-                                    Toast.makeText(ResetPasswordActivity.this, "Password sent to" +
-                                            " your email. Check that now", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ResetPasswordActivity.this, getResources()
+                                            .getString(R.string.toast_password_reset_instruction_sent), Toast.LENGTH_SHORT).show();
                                     progressBar.setVisibility(View.GONE);
                                     startActivity(new Intent(ResetPasswordActivity.this, SignInActivity.class));
                                     finish();
                                 } else {
-                                    emailEditText.setError("Email not registered");
+                                    emailEditText.setError(getResources().getString(R.string.error_email_not_registered));
                                 }
                             }
                         });

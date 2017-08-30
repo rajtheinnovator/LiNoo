@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
+import com.enpassio1.linoo.R;
 import com.enpassio1.linoo.data.DriveContract.DriveEntry;
 
 /**
@@ -107,7 +108,8 @@ public class DriveProvider extends ContentProvider {
                         null, null, sortOrder);
                 break;
             default:
-                throw new IllegalArgumentException("Cannot query unknown URI " + uri);
+                throw new IllegalArgumentException(getContext()
+                        .getResources().getString(R.string.exception_unknown_uri) + uri);
         }
 
         // Set notification URI on the Cursor,
@@ -126,7 +128,8 @@ public class DriveProvider extends ContentProvider {
             case DRIVES:
                 return insertDrive(uri, contentValues);
             default:
-                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+                throw new IllegalArgumentException(getContext()
+                        .getResources().getString(R.string.exception_insert_not_supported) + uri);
         }
     }
 
@@ -139,32 +142,38 @@ public class DriveProvider extends ContentProvider {
         // Check that the drives name is not null
         String name = values.getAsString(DriveEntry.COLUMN_COMPANY_NAME);
         if (name == null) {
-            throw new IllegalArgumentException("Drive requires a name");
+            throw new IllegalArgumentException(getContext()
+                    .getResources().getString(R.string.exception_drive_requires_a_name));
         }
 
         // Check that the drives name is not null
         String date = values.getAsString(DriveEntry.COLUMN_DRIVE_DATE);
         if (date == null) {
-            throw new IllegalArgumentException("Drive requires a recruitment date");
+            throw new IllegalArgumentException(getContext()
+                    .getResources().getString(R.string.exception_drive_requires_a_date));
         }
 
         // If the price is provided, check that it's greater than or equal to 0
         String location = values.getAsString(DriveEntry.COLUMN_DRIVE_LOCATION);
         if (location == null) {
-            throw new IllegalArgumentException("Drive requires a location of conduct");
+            throw new IllegalArgumentException(getContext()
+                    .getResources().getString(R.string.exception_drive_requires_a_location));
         }
 
         String jobPosition = values.getAsString(DriveEntry.COLUMN_JOB_POSITION);
         if (jobPosition == null) {
-            throw new IllegalArgumentException("Drive requires valid job position");
+            throw new IllegalArgumentException(getContext()
+                    .getResources().getString(R.string.exception_drive_requires_a_job_profile));
         }
         String jobDescription = values.getAsString(DriveEntry.COLUMN_JOB_DESCRIPTION);
         if (jobDescription == null) {
-            throw new IllegalArgumentException("Drive requires valid job description");
+            throw new IllegalArgumentException(getContext()
+                    .getResources().getString(R.string.exception_drive_requires_drive_description));
         }
         String driveKey = values.getAsString(DriveEntry.COLUMN_DRIVE_KEY);
         if (driveKey == null) {
-            throw new IllegalArgumentException("Drive requires valid drive key");
+            throw new IllegalArgumentException(getContext()
+                    .getResources().getString(R.string.exception_drive_requires_a_valid_drive_key));
         }
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
@@ -204,7 +213,8 @@ public class DriveProvider extends ContentProvider {
                 rowsDeleted = database.delete(DriveEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
-                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+                throw new IllegalArgumentException(getContext()
+                        .getResources().getString(R.string.exception_deletion_not_supported) + uri);
         }
 
         // If 1 or more rows were deleted, then notify all listeners that the data at the
@@ -232,7 +242,8 @@ public class DriveProvider extends ContentProvider {
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateDrive(uri, contentValues, selection, selectionArgs);
             default:
-                throw new IllegalArgumentException("Update is not supported for " + uri);
+                throw new IllegalArgumentException(getContext()
+                        .getResources().getString(R.string.exception_update_not_supported) + uri);
         }
     }
 
@@ -245,38 +256,44 @@ public class DriveProvider extends ContentProvider {
         if (values.containsKey(DriveEntry.COLUMN_COMPANY_NAME)) {
             String companyName = values.getAsString(DriveEntry.COLUMN_COMPANY_NAME);
             if (companyName == null) {
-                throw new IllegalArgumentException("Drive requires a name");
+                throw new IllegalArgumentException(getContext()
+                        .getResources().getString(R.string.exception_drive_requires_a_name));
             }
         }
 
         if (values.containsKey(DriveEntry.COLUMN_DRIVE_DATE)) {
             String driveDate = values.getAsString(DriveEntry.COLUMN_DRIVE_DATE);
             if (driveDate == null) {
-                throw new IllegalArgumentException("Drive requires a valid recruitment date");
+                throw new IllegalArgumentException(getContext()
+                        .getResources().getString(R.string.exception_drive_requires_a_date));
             }
         }
         if (values.containsKey(DriveEntry.COLUMN_DRIVE_LOCATION)) {
             String driveLocation = values.getAsString(DriveEntry.COLUMN_DRIVE_LOCATION);
             if (driveLocation == null) {
-                throw new IllegalArgumentException("Drive requires a valid location");
+                throw new IllegalArgumentException(getContext()
+                        .getResources().getString(R.string.exception_drive_requires_a_location));
             }
         }
         if (values.containsKey(DriveEntry.COLUMN_JOB_POSITION)) {
             String jobPosition = values.getAsString(DriveEntry.COLUMN_JOB_POSITION);
             if (jobPosition == null) {
-                throw new IllegalArgumentException("Drive requires a valid job position");
+                throw new IllegalArgumentException(getContext()
+                        .getResources().getString(R.string.exception_drive_requires_a_job_profile));
             }
         }
         if (values.containsKey(DriveEntry.COLUMN_JOB_DESCRIPTION)) {
             String jobDescription = values.getAsString(DriveEntry.COLUMN_JOB_DESCRIPTION);
             if (jobDescription == null) {
-                throw new IllegalArgumentException("Drive requires a valid job description");
+                throw new IllegalArgumentException(getContext()
+                        .getResources().getString(R.string.exception_drive_requires_drive_description));
             }
         }
         if (values.containsKey(DriveEntry.COLUMN_DRIVE_KEY)) {
             String driveFirebasePushIdKey = values.getAsString(DriveEntry.COLUMN_DRIVE_KEY);
             if (driveFirebasePushIdKey == null) {
-                throw new IllegalArgumentException("Drive requires a valid job description");
+                throw new IllegalArgumentException(getContext()
+                        .getResources().getString(R.string.exception_drive_requires_a_valid_drive_key));
             }
         }
 

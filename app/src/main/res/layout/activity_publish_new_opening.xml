@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:padding="8dp"
-            android:text="Company Name"
+            android:text="@string/heading_company_name"
             android:textSize="18sp" />
 
         <EditText
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:padding="8dp"
-            android:text="Recruitment Date"
+            android:text="@string/heading_recruitment_date"
             android:textSize="18sp" />
 
         <EditText
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:padding="8dp"
-            android:text="Recruitment Location"
+            android:text="@string/heading_recruitment_location"
             android:textSize="18sp" />
 
         <EditText
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:padding="8dp"
-            android:text="Job Position"
+            android:text="@string/heading_job_profile"
             android:textSize="14sp" />
 
         <EditText
@@ -83,7 +83,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:padding="8dp"
-            android:text="Drive Description"
+            android:text="@string/heading_job_description"
             android:textSize="14sp" />
 
         <EditText
@@ -98,6 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="PUBLISH" />
+            android:text="@string/text_publish_button"
+            android:textAllCaps="false" />
     </LinearLayout>
 </ScrollView>

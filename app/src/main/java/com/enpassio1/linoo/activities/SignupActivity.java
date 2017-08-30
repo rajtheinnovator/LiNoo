@@ -69,11 +69,12 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 String email = emailEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
                 if (TextUtils.isEmpty(email)) {
-                    emailEditText.setError("Enter a valid email");
+                    emailEditText.setError(getResources().getString(R.string.error_enter_valid_email));
                     return;
                 }
                 if (password.length() < 6) {
-                    passwordEditText.setError("Password must be atleast 6 characters long");
+                    passwordEditText.setError(getResources().getString(R.string
+                            .error_password_less_than_six_character_long));
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
@@ -89,7 +90,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                                 } else {
                                     // If sign in fails, display a message to the user.
 
-                                    Toast.makeText(SignupActivity.this, "Authentication failed.",
+                                    Toast.makeText(SignupActivity.this, getResources()
+                                                    .getString(R.string.toast_problem_creating_account),
                                             Toast.LENGTH_SHORT).show();
 
                                 }

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".activities.SignupActivity">
 
     <LinearLayout
@@ -17,33 +18,36 @@
             android:id="@+id/email_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
+            android:hint="@string/hint_email"
             android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:hint="@string/hint_password"
             android:inputType="textPassword" />
 
         <Button
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sign In !" />
+            android:text="@string/text_button_sign_in"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/reset_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Forgot my password. Reset it now !" />
+            android:text="@string/text_button_forgot_password"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/sign_up_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Not registered. Sign me up instead" />
+            android:text="@string/text_button_not_registered_yet"
+            android:textAllCaps="false" />
     </LinearLayout>
 
     <ProgressBar

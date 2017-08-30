@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.enpassio1.linoo.R;
 import com.enpassio1.linoo.fragments.DatePickerFragment;
@@ -56,7 +55,7 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
                     DialogFragment newFragment = new DatePickerFragment();
                     newFragment.show(getSupportFragmentManager(), "datePicker");
                 } else {
-                    Toast.makeText(getApplicationContext(), "Lost the focus", Toast.LENGTH_LONG).show();
+                    //do next step if focus is not on edittext
                 }
             }
         });
@@ -66,7 +65,7 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
         publishButton = (Button) findViewById(R.id.publish_button);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDrivesDatabaseReference = mFirebaseDatabase.getReference().child("drives");
+        mDrivesDatabaseReference = mFirebaseDatabase.getReference().child(getResources().getString(R.string.firebase_database_child_drives));
 
         publishButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,19 +77,19 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
                 driveDetails = jobDescriptionEditText.getText().toString().trim();
 
                 if (TextUtils.isEmpty(companyName)) {
-                    companyNameEditText.setError("Enter the company name");
+                    companyNameEditText.setError(getResources().getString(R.string.error_enter_company_name));
                     return;
                 }
                 if (TextUtils.isEmpty(recruitmentPlace)) {
-                    hiringPlaceEditText.setError("Where is this drive being conducted?");
+                    hiringPlaceEditText.setError(getResources().getString(R.string.error_enter_recruitment_location));
                     return;
                 }
                 if (TextUtils.isEmpty(jobPosition)) {
-                    jobPositionEditText.setError("Enter the job profile");
+                    jobPositionEditText.setError(getResources().getString(R.string.error_enter_job_profile));
                     return;
                 }
                 if (TextUtils.isEmpty(driveDetails)) {
-                    jobDescriptionEditText.setError("Give a detailed description about the drive");
+                    jobDescriptionEditText.setError(getResources().getString(R.string.erroe_enter_job_description));
                     return;
                 }
 
@@ -111,7 +110,7 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
 
-        hiringDateEditText.setText(day + "/" + month + "/" + year);
+        hiringDateEditText.setText(getResources().getString(R.string.formatted_date, day, month, year));
         hiringDateEditText.setEnabled(false);
         hiringDateEditText.setFocusable(true);
         hiringDateEditText.setClickable(true);

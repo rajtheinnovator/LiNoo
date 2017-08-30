@@ -19,8 +19,10 @@ public class DriveDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drive_details);
-        Bundle driveDetailsBundle = getIntent().getBundleExtra("driveDetailsBundle");
-        UpcomingDrives currentUpcomingDrive = driveDetailsBundle.getParcelable("currentUpcomingDrives");
+        Bundle driveDetailsBundle = getIntent().getBundleExtra(getResources().getString
+                (R.string.drive_details_bundle_key));
+        UpcomingDrives currentUpcomingDrive = driveDetailsBundle.getParcelable
+                (getResources().getString(R.string.current_upcoming_drive_key));
 
         //instantiate the views
         companyNameTextView = (TextView) findViewById(R.id.company_name_text_view);

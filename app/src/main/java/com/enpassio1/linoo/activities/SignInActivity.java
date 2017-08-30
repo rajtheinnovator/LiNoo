@@ -63,11 +63,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 String email = emailEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
                 if (TextUtils.isEmpty(email)) {
-                    emailEditText.setError("Enter a valid email");
+                    emailEditText.setError(getResources().getString(R.string.error_enter_valid_email));
                     return;
                 }
                 if (TextUtils.isEmpty(password)) {
-                    passwordEditText.setError("Enter your password");
+                    passwordEditText.setError(getResources().getString(R.string.error_enter_password));
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
@@ -83,7 +83,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                                     finish();
                                 } else {
                                     // If sign in fails, display a message to the user.
-                                    Toast.makeText(SignInActivity.this, "Authentication failed.",
+                                    Toast.makeText(SignInActivity.this, getResources()
+                                                    .getString(R.string.toast_authentication_failed),
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }

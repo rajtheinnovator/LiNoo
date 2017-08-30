@@ -126,8 +126,10 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
 
                 Intent drivesDetailIntent = new Intent(context, DriveDetailsActivity.class);
                 Bundle driveDetailsBundle = new Bundle();
-                driveDetailsBundle.putParcelable("currentUpcomingDrives", currentUpcomingDrives);
-                drivesDetailIntent.putExtra("driveDetailsBundle", driveDetailsBundle);
+                driveDetailsBundle.putParcelable(context.getResources()
+                        .getString(R.string.current_upcoming_drive_key), currentUpcomingDrives);
+                drivesDetailIntent.putExtra(context.getResources()
+                        .getString(R.string.drive_details_bundle_key), driveDetailsBundle);
                 context.startActivity(drivesDetailIntent);
 
 

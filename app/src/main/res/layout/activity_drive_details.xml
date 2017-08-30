@@ -10,8 +10,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical">
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="vertical"
+        android:padding="8dp">
 
         <LinearLayout
             android:id="@+id/company_name_text_view_container"
@@ -25,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:gravity="left"
-                android:text="Employer: "
+                android:text="@string/heading_emplotyer"
                 android:textSize="18sp" />
 
             <TextView
@@ -47,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:gravity="left"
-                android:text="Hiring on: "
+                android:text="@string/heading_recruitment_date"
                 android:textSize="18sp" />
 
             <TextView
@@ -69,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:gravity="left"
-                android:text="Location: "
+                android:text="@string/heading_recruitment_location"
                 android:textSize="18sp" />
 
             <TextView
@@ -78,6 +79,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp" />
         </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/job_title_text_view_container"
@@ -91,20 +93,20 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:gravity="left"
+                android:text="@string/heading_job_profile"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/job_title_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Position: "
                 android:textSize="14sp" />
         </LinearLayout>
-
         <TextView
             android:id="@+id/job_description_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="fill_horizontal"
             android:textSize="14sp" />
     </LinearLayout>
 </ScrollView>

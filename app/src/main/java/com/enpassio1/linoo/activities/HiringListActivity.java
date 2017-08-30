@@ -17,7 +17,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -68,7 +67,8 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
 
 
         //code below referenced from: https://firebase.google.com/docs/cloud-messaging/android/send-multiple
-        FirebaseMessaging.getInstance().subscribeToTopic("drives");
+        FirebaseMessaging.getInstance().subscribeToTopic(getResources()
+                .getString(R.string.subscribe_to_topic_drives));
 
         if (savedInstanceState == null) {
             upcomingDrivesArrayList = new ArrayList<UpcomingDrives>();
@@ -77,7 +77,8 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent publishNewOpeningIntent = new Intent(HiringListActivity.this, PublishNewOpeningActivity.class);
+                Intent publishNewOpeningIntent = new Intent(HiringListActivity.this,
+                        PublishNewOpeningActivity.class);
                 startActivity(publishNewOpeningIntent);
             }
         });
@@ -97,15 +98,14 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
         upcomingHiresListAdapter = new UpcomingHiresListAdapter(this, upcomingDrivesArrayList);
         drivesListRecyclerView.setAdapter(upcomingHiresListAdapter);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDrivesDatabaseReference = mFirebaseDatabase.getReference().child("drives");
+        mDrivesDatabaseReference = mFirebaseDatabase.getReference().child(getResources()
+                .getString(R.string.firebase_database_child_drives));
 
      /* code below referenced from: https://developer.android.com/training/basics/data-storage/shared-preferences.html */
 
         SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-        String myValue = sharedPreferences.getString("key", "default");
-        Log.v("my_tag", "myValue is " + myValue);
-        if (!sharedPreferences.contains("key")) {
-            Log.v("my_tag", "doesn't contains key");
+        if (!sharedPreferences.contains(getResources().getString(R.string.shared_preference_key))) {
+
             //that means, the app is getting started for the first time
             //so, load directly from the firebase database
 
@@ -141,8 +141,9 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
 
             /* code below referenced from: https://developer.android.com/training/basics/data-storage/shared-preferences.html */
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("key", "value");
-            editor.commit();
+            editor.putString(getResources().getString(R.string.shared_preference_key),
+                    getResources().getString(R.string.shared_preference_value));
+            editor.apply();
         } else {
             mChildEventListener = new ChildEventListener() {
                 @Override
@@ -200,7 +201,7 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
         NotificationCompat.Builder notificationBuilder = new
                 NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Message")
+                .setContentTitle(getResources().getString(R.string.notification_title))
                 .setContentText(upcomingDrives.getDetailedDescription())
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);

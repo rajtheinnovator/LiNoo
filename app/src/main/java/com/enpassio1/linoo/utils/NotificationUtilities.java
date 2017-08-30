@@ -23,7 +23,7 @@ public class NotificationUtilities {
 * https://github.com/udacity/ud851-Exercises/blob/T10.04-Solution-PeriodicSyncWithJobDispatcher/app/src/main/java/com/example/android/background/sync/ReminderUtilities.java
 * */
 
-    private static final int REMINDER_INTERVAL_MINUTES = 1;
+    private static final int REMINDER_INTERVAL_MINUTES = 30;
     private static final int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
     private static final int SYNC_FLEXTIME_SECONDS = REMINDER_INTERVAL_SECONDS;
 
