@@ -60,6 +60,8 @@
     <string name="text_button_sign_up">Sign Up</string>
 
     <string name="check_internet_connectivity">Check internet connectivity!</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>
 
