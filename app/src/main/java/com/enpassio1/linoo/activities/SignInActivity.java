@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -61,6 +62,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.sign_in_button:
                 String email = emailEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
+                if (TextUtils.isEmpty(email)) {
+                    emailEditText.setError("Enter a valid email");
+                    return;
+                }
+                if (TextUtils.isEmpty(password)) {
+                    passwordEditText.setError("Enter your password");
+                    return;
+                }
                 progressBar.setVisibility(View.VISIBLE);
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

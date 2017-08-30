@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -67,6 +68,14 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.sign_up_button:
                 String email = emailEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
+                if (TextUtils.isEmpty(email)) {
+                    emailEditText.setError("Enter a valid email");
+                    return;
+                }
+                if (password.length() < 6) {
+                    passwordEditText.setError("Password must be atleast 6 characters long");
+                    return;
+                }
                 progressBar.setVisibility(View.VISIBLE);
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

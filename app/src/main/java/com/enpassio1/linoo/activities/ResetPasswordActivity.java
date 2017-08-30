@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -64,6 +65,10 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
         switch (view.getId()) {
             case R.id.reset_password:
                 String email = emailEditText.getText().toString().trim();
+                if (TextUtils.isEmpty(email)) {
+                    emailEditText.setError("Enter a valid email");
+                    return;
+                }
                 progressBar.setVisibility(View.VISIBLE);
                 mAuth.sendPasswordResetEmail(email)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -71,11 +76,13 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     emailEditText.setText("");
-                                    Toast.makeText(ResetPasswordActivity.this, "Password sent to " +
-                                            "your email. Check that now", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ResetPasswordActivity.this, "Password sent to" +
+                                            " your email. Check that now", Toast.LENGTH_SHORT).show();
                                     progressBar.setVisibility(View.GONE);
                                     startActivity(new Intent(ResetPasswordActivity.this, SignInActivity.class));
                                     finish();
+                                } else {
+                                    emailEditText.setError("Email not registered");
                                 }
                             }
                         });

@@ -2,6 +2,7 @@ package com.enpassio1.linoo.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,6 +53,28 @@ public class PublishNewOpeningActivity extends AppCompatActivity {
                 String recruitmentPlace = hiringPlaceEditText.getText().toString().trim();
                 String jobPosition = jobPositionEditText.getText().toString().trim();
                 String driveDetails = jobDescriptionEditText.getText().toString().trim();
+
+                if (TextUtils.isEmpty(companyName)) {
+                    companyNameEditText.setError("Enter the company name");
+                    return;
+                }
+                if (TextUtils.isEmpty(recruitmentDate)) {
+                    hiringDateEditText.setError("Enter date of recruitment");
+                    return;
+                }
+                if (TextUtils.isEmpty(recruitmentPlace)) {
+                    hiringPlaceEditText.setError("Where is this drive being conducted?");
+                    return;
+                }
+                if (TextUtils.isEmpty(jobPosition)) {
+                    jobPositionEditText.setError("Enter the job profile");
+                    return;
+                }
+                if (TextUtils.isEmpty(driveDetails)) {
+                    jobDescriptionEditText.setError("Give a detailed description about the drive");
+                    return;
+                }
+
                 UpcomingDrives upcomingDrives = new UpcomingDrives(companyName, recruitmentDate,
                         recruitmentPlace, jobPosition, driveDetails);
                 mDrivesDatabaseReference.push().setValue(upcomingDrives);
