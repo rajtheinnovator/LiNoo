@@ -82,7 +82,7 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
         cityList.add(getResources().getString(R.string.city_mumbai));
         cityList.add(getResources().getString(R.string.city_new_delhi));
         cityList.add(getResources().getString(R.string.city_hyderabad));
-
+        setupSpinner();
         if (InternetConnectivity.isInternetConnected(PublishNewOpeningActivity.this)) {
             mFirebaseDatabase = FirebaseDatabase.getInstance();
             mDrivesDatabaseReference = mFirebaseDatabase.getReference().child(getResources().getString(R.string.firebase_database_child_drives));
@@ -95,7 +95,6 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
                     jobPosition = jobPositionEditText.getText().toString().trim();
                     driveDetails = jobDescriptionEditText.getText().toString().trim();
 
-                    setupSpinner();
                     recruitmentPlace = selectedCity;
                     Log.v("my_tagaa", "recruitmentPlace is: " + recruitmentPlace);
 
