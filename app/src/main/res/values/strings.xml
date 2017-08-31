@@ -70,5 +70,9 @@
     <string name="city_mumbai">Mumbai</string>
     <string name="city_new_delhi">New Delhi</string>
 
+    <string name="bottom_navigation_discard">Discard</string>
+    <string name="bottom_navigation_save_offline">Save for later</string>
+    <string name="bottom_navigation_publish">Publish</string>
+
 </resources>
 

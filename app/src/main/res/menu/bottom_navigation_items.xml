@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_discard"
+        android:icon="@mipmap/ic_launcher"
+        android:title="@string/bottom_navigation_discard" />
+    <item
+        android:id="@+id/action_save_for_later"
+        android:icon="@mipmap/ic_launcher"
+        android:title="@string/bottom_navigation_save_offline" />
+    <item
+        android:id="@+id/action_publish"
+        android:icon="@mipmap/ic_launcher"
+        android:title="@string/bottom_navigation_publish" />
+</menu>

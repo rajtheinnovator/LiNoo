@@ -1,14 +1,17 @@
 package com.enpassio1.linoo.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -31,7 +34,6 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
     EditText hiringPlaceEditText;
     EditText jobPositionEditText;
     EditText jobDescriptionEditText;
-    Button publishButton;
 
     String companyName;
     String recruitmentDate;
@@ -73,9 +75,8 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
 
         jobPositionEditText = (EditText) findViewById(R.id.job_position_edit_text);
         jobDescriptionEditText = (EditText) findViewById(R.id.drive_details__edit_text);
-        publishButton = (Button) findViewById(R.id.publish_button);
         citySpinner = (Spinner) findViewById(R.id.recruitment_place_spinner);
-
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         cityList = new ArrayList<String>();
         cityList.add(getResources().getString(R.string.city_bengaluru));
         cityList.add(getResources().getString(R.string.city_pune));
@@ -83,45 +84,68 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
         cityList.add(getResources().getString(R.string.city_new_delhi));
         cityList.add(getResources().getString(R.string.city_hyderabad));
         setupSpinner();
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDrivesDatabaseReference = mFirebaseDatabase.getReference().child(getResources().getString(R.string.firebase_database_child_drives));
+
+        /* bottom navigation view code referenced from:
+         * http://www.truiton.com/2017/01/android-bottom-navigation-bar-example/
+         */
+        bottomNavigationView.setOnNavigationItemSelectedListener
+                (new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                        switch (item.getItemId()) {
+                            case R.id.action_discard:
+                                startActivity(new Intent(PublishNewOpeningActivity.this, HiringListActivity.class));
+                                finish();
+                                break;
+                            case R.id.action_save_for_later:
+                                //
+                                break;
+                            case R.id.action_publish:
+                                publish();
+                                finish();
+                                break;
+                        }
+                        return true;
+                    }
+                });
+    }
+
+    private void publish() {
         if (InternetConnectivity.isInternetConnected(PublishNewOpeningActivity.this)) {
-            mFirebaseDatabase = FirebaseDatabase.getInstance();
-            mDrivesDatabaseReference = mFirebaseDatabase.getReference().child(getResources().getString(R.string.firebase_database_child_drives));
+            companyName = companyNameEditText.getText().toString().trim();
+            recruitmentDate = hiringDateEditText.getText().toString().trim();
+            jobPosition = jobPositionEditText.getText().toString().trim();
+            driveDetails = jobDescriptionEditText.getText().toString().trim();
 
-            publishButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    companyName = companyNameEditText.getText().toString().trim();
-                    recruitmentDate = hiringDateEditText.getText().toString().trim();
-                    jobPosition = jobPositionEditText.getText().toString().trim();
-                    driveDetails = jobDescriptionEditText.getText().toString().trim();
+            recruitmentPlace = selectedCity;
+            Log.v("my_tagaa", "recruitmentPlace is: " + recruitmentPlace);
 
-                    recruitmentPlace = selectedCity;
-                    Log.v("my_tagaa", "recruitmentPlace is: " + recruitmentPlace);
+            if (TextUtils.isEmpty(companyName)) {
+                companyNameEditText.setError(getResources().getString(R.string.error_enter_company_name));
+                return;
+            }
+            if (TextUtils.isEmpty(jobPosition)) {
+                jobPositionEditText.setError(getResources().getString(R.string.error_enter_job_profile));
+                return;
+            }
+            if (TextUtils.isEmpty(driveDetails)) {
+                jobDescriptionEditText.setError(getResources().getString(R.string.erroe_enter_job_description));
+                return;
+            }
 
-                    if (TextUtils.isEmpty(companyName)) {
-                        companyNameEditText.setError(getResources().getString(R.string.error_enter_company_name));
-                        return;
-                    }
-                    if (TextUtils.isEmpty(jobPosition)) {
-                        jobPositionEditText.setError(getResources().getString(R.string.error_enter_job_profile));
-                        return;
-                    }
-                    if (TextUtils.isEmpty(driveDetails)) {
-                        jobDescriptionEditText.setError(getResources().getString(R.string.erroe_enter_job_description));
-                        return;
-                    }
-
-                    UpcomingDrives upcomingDrives = new UpcomingDrives(companyName, recruitmentDate,
-                            recruitmentPlace, jobPosition, driveDetails);
-                    mDrivesDatabaseReference.push().setValue(upcomingDrives);
+            UpcomingDrives upcomingDrives = new UpcomingDrives(companyName, recruitmentDate,
+                    recruitmentPlace, jobPosition, driveDetails);
+            mDrivesDatabaseReference.push().setValue(upcomingDrives);
 
                 /* Clear input field */
-                    companyNameEditText.setText("");
-                    hiringDateEditText.setText("");
-                    jobPositionEditText.setText("");
-                    jobDescriptionEditText.setText("");
-                }
-            });
+            companyNameEditText.setText("");
+            hiringDateEditText.setText("");
+            jobPositionEditText.setText("");
+            jobDescriptionEditText.setText("");
         } else {
             Toast.makeText(PublishNewOpeningActivity.this, getResources()
                     .getString(R.string.check_internet_connectivity), Toast.LENGTH_SHORT).show();
@@ -129,6 +153,8 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
     }
 
     private void setupSpinner() {
+        //codes below referenced from: https://www.mkyong.com/android/android-spinner-drop-down-list-example/
+
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, cityList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
