@@ -7,7 +7,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -122,7 +121,6 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
             driveDetails = jobDescriptionEditText.getText().toString().trim();
 
             recruitmentPlace = selectedCity;
-            Log.v("my_tagaa", "recruitmentPlace is: " + recruitmentPlace);
 
             if (TextUtils.isEmpty(companyName)) {
                 companyNameEditText.setError(getResources().getString(R.string.error_enter_company_name));

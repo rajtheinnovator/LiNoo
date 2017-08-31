@@ -25,10 +25,10 @@ public class FirebaseDataFetchJobService extends JobService {
     private AsyncTask mBackgroundTask;
 
 
-    // COMPLETED (4) Override onStartJob
+    // Override onStartJob
 
     /**
-     * The entry point to your Job. Implementations should offload work to another thread of
+     * The entry point to my Job. Implementations should offload work to another thread of
      * execution as soon as possible.
      * <p>
      * This is called by the Job Dispatcher to tell us we should start our job. Keep in mind this
@@ -40,17 +40,12 @@ public class FirebaseDataFetchJobService extends JobService {
     @Override
     public boolean onStartJob(final JobParameters jobParameters) {
 
-        // COMPLETED (5) By default, jobs are executed on the main thread, so make an anonymous class extending
-        //  AsyncTask called mBackgroundTask.
         // Here's where we make an AsyncTask so that this is no longer on the main thread
         mBackgroundTask = new AsyncTask() {
 
-            // COMPLETED (6) Override doInBackground
+            //Override doInBackground
             @Override
             protected Object doInBackground(Object[] params) {
-                // COMPLETED (7) Use ReminderTasks to execute the new charging reminder task you made, use
-                // this service as the context (WaterReminderFirebaseJobService.this) and return null
-                // when finished.
                 Context context = FirebaseDataFetchJobService.this;
 
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
@@ -60,7 +55,7 @@ public class FirebaseDataFetchJobService extends JobService {
                 databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        // Is better to use a List, because you don't know the size
+                        // Is better to use a List, because one doesn't know the size
                         // of the iterator returned by dataSnapshot.getChildren() to
                         // initialize the array
                         int rowsDeleted = getContentResolver().delete(DriveContract.DriveEntry.CONTENT_URI, null, null);
@@ -68,7 +63,6 @@ public class FirebaseDataFetchJobService extends JobService {
                             UpcomingDrives upcomingDrive = areaSnapshot.getValue(UpcomingDrives.class);
 
                             //code below referenced from: https://stackoverflow.com/a/6233664/5770629
-
 
                             //as this data doesn't exist, so write that in, into the SQLite database
 
@@ -95,7 +89,7 @@ public class FirebaseDataFetchJobService extends JobService {
 
             @Override
             protected void onPostExecute(Object o) {
-                // COMPLETED (8) Override onPostExecute and called jobFinished. Pass the job parameters
+                // Override onPostExecute and called jobFinished. Pass the job parameters
                 // and false to jobFinished. This will inform the JobManager that your job is done
                 // and that you do not want to reschedule the job.
 
@@ -110,16 +104,14 @@ public class FirebaseDataFetchJobService extends JobService {
             }
         };
 
-        // COMPLETED (9) Execute the AsyncTask
         mBackgroundTask.execute();
-        // COMPLETED (10) Return true
         return true;
     }
 
     @Override
     public boolean onStopJob(JobParameters jobParameters) {
-        // COMPLETED (12) If mBackgroundTask is valid, cancel it
-        // COMPLETED (13) Return true to signify the job should be retried
+        // If mBackgroundTask is valid, cancel it
+        // Return true to signify the job should be retried
         if (mBackgroundTask != null) mBackgroundTask.cancel(true);
         return true;
     }

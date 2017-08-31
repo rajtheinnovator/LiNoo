@@ -61,12 +61,9 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
         setContentView(R.layout.activity_main);
 
         auth = FirebaseAuth.getInstance();
-
-
         notificationManager =
                 (NotificationManager)
                         getSystemService(Context.NOTIFICATION_SERVICE);
-
 
         //code below referenced from: https://firebase.google.com/docs/cloud-messaging/android/send-multiple
         FirebaseMessaging.getInstance().subscribeToTopic(getResources()
@@ -225,13 +222,9 @@ public class HiringListActivity extends AppCompatActivity implements LoaderManag
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_sign_out) {
             auth.signOut();
             upcomingHiresListAdapter.setDriveData(null);
             startActivity(new Intent(HiringListActivity.this, SignInActivity.class));

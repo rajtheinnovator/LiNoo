@@ -31,23 +31,23 @@ public class NotificationUtilities {
 
     private static boolean sInitialized;
 
-    // COMPLETED (16) Create a synchronized, public static method called scheduleNewDriveAddedReminder that takes
+    // Create a synchronized, public static method called scheduleNewDriveAddedReminder that takes
     // in a context. This method will use FirebaseJobDispatcher to schedule a job that repeats roughly
-    // every REMINDER_INTERVAL_SECONDS when the phone is charging. It will trigger WaterReminderFirebaseJobService
+    // every REMINDER_INTERVAL_SECONDS when the phone is charging. It will trigger FirebaseDataFetchJobService
     // Checkout https://github.com/firebase/firebase-jobdispatcher-android for an example
     synchronized public static void scheduleNewDriveAddedReminder(@NonNull final Context context) {
 
 
-        // COMPLETED (17) If the job has already been initialized, return
+        // If the job has already been initialized, return
         if (sInitialized) return;
 
-        // COMPLETED (18) Create a new GooglePlayDriver
+        // Create a new GooglePlayDriver
         Driver driver = new GooglePlayDriver(context);
-        // COMPLETED (19) Create a new FirebaseJobDispatcher with the driver
+        // Create a new FirebaseJobDispatcher with the driver
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
 
 
-        /* Create the Job to periodically create reminders to drink water */
+        /* Create the Job to periodically fetch data from Firebase */
         Job constraintReminderJob = dispatcher.newJobBuilder()
                 /* The Service that will be used to write to preferences */
                 .setService(FirebaseDataFetchJobService.class)
@@ -70,7 +70,7 @@ public class NotificationUtilities {
 
         dispatcher.schedule(constraintReminderJob);
 
-        // COMPLETED (22) Set sInitialized to true to mark that we're done setting up the job
+        // Set sInitialized to true to mark that we're done setting up the job
         /* The job has been initialized */
         sInitialized = true;
     }
