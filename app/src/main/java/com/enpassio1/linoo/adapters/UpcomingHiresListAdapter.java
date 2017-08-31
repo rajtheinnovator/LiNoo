@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.enpassio1.linoo.R;
 import com.enpassio1.linoo.activities.DriveDetailsActivity;
+import com.enpassio1.linoo.activities.HiringListActivity;
+import com.enpassio1.linoo.fragments.DriveDetailsFragment;
 import com.enpassio1.linoo.models.UpcomingDrives;
 
 import java.util.ArrayList;
@@ -24,14 +26,16 @@ import java.util.Collections;
 public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHiresListAdapter.ViewHolder> {
 
     private static ArrayList<UpcomingDrives> mUpcomingDrivesArrayList;
+    private static boolean mTwoPaneStatus;
     /* Store the context for easy access */
     private Context mContext;
     private UpcomingDrives mUpcomingDrives;
 
     /* Pass in the drives array into the constructor */
-    public UpcomingHiresListAdapter(Context context, ArrayList<UpcomingDrives> upcomingDrives) {
+    public UpcomingHiresListAdapter(Context context, ArrayList<UpcomingDrives> upcomingDrives, boolean twoPaneStatus) {
         mUpcomingDrivesArrayList = upcomingDrives;
         mContext = context;
+        mTwoPaneStatus = twoPaneStatus;
     }
 
     /* Easy access to the context object in the recyclerview */
@@ -71,6 +75,7 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
             return mUpcomingDrivesArrayList.size();
         }
     }
+
 
     public void setDriveData(ArrayList<UpcomingDrives> upcomingDrivesArrayList) {
         mUpcomingDrivesArrayList = upcomingDrivesArrayList;
@@ -122,16 +127,27 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
             int position = getAdapterPosition(); // gets item position
             if (position != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
                 UpcomingDrives currentUpcomingDrives = mUpcomingDrivesArrayList.get(position);
+
+                if (!mTwoPaneStatus) {
                 /* We can access the data within the views */
 
-                Intent drivesDetailIntent = new Intent(context, DriveDetailsActivity.class);
-                Bundle driveDetailsBundle = new Bundle();
-                driveDetailsBundle.putParcelable(context.getResources()
-                        .getString(R.string.current_upcoming_drive_key), currentUpcomingDrives);
-                drivesDetailIntent.putExtra(context.getResources()
-                        .getString(R.string.drive_details_bundle_key), driveDetailsBundle);
-                context.startActivity(drivesDetailIntent);
-
+                    Intent drivesDetailIntent = new Intent(context, DriveDetailsActivity.class);
+                    Bundle driveDetailsBundle = new Bundle();
+                    driveDetailsBundle.putParcelable(context.getResources()
+                            .getString(R.string.current_upcoming_drive_key), currentUpcomingDrives);
+                    drivesDetailIntent.putExtra(context.getResources()
+                            .getString(R.string.drive_details_bundle_key), driveDetailsBundle);
+                    context.startActivity(drivesDetailIntent);
+                } else {
+                    DriveDetailsFragment driveDetailsFragment = new DriveDetailsFragment();
+                    Bundle driveDetailsBundle = new Bundle();
+                    driveDetailsBundle.putParcelable(context.getResources()
+                            .getString(R.string.current_upcoming_drive_key), currentUpcomingDrives);
+                    driveDetailsFragment.setArguments(driveDetailsBundle);
+                    ((HiringListActivity) context).getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_drive_details_container, driveDetailsFragment)
+                            .commit();
+                }
 
             }
         }

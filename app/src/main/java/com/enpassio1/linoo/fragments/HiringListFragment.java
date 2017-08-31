@@ -65,6 +65,9 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
     private FirebaseAuth auth;
     private ArrayList<UpcomingDrives> mUpcomingDrivesArrayList;
 
+    //logic for two pane layout
+    private boolean mTwoPane;
+
     public HiringListFragment() {
         // Required empty public constructor
     }
@@ -73,6 +76,11 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_hiring_list, container, false);
+        Bundle bundle = getArguments();
+        String mTwoPaneString = bundle.getString("mTwoPane");
+        if (mTwoPaneString.equals("true")) {
+            mTwoPane = true;
+        } else mTwoPane = false;
 
         auth = FirebaseAuth.getInstance();
         notificationManager =
@@ -108,7 +116,7 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
 
         //adding data for testing purposes
 
-        upcomingHiresListAdapter = new UpcomingHiresListAdapter(getContext(), upcomingDrivesArrayList);
+        upcomingHiresListAdapter = new UpcomingHiresListAdapter(getContext(), upcomingDrivesArrayList, mTwoPane);
         drivesListRecyclerView.setAdapter(upcomingHiresListAdapter);
         if (InternetConnectivity.isInternetConnected(getContext())) {
             mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -203,6 +211,7 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
         }
         //finally, start the loader and load data from it
         getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+
 
         return rootView;
     }
