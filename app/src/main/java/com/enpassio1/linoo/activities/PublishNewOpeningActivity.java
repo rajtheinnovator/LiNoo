@@ -1,10 +1,12 @@
 package com.enpassio1.linoo.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -97,8 +99,44 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
 
                         switch (item.getItemId()) {
                             case R.id.action_discard:
-                                startActivity(new Intent(PublishNewOpeningActivity.this, HiringListActivity.class));
-                                finish();
+
+
+                                //show an alert before exiting
+
+                                /* code for alert dialog referenced from:
+                                * https://www.mkyong.com/android/android-alert-dialog-example/
+                                */
+                                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                        PublishNewOpeningActivity.this);
+
+                                // set title
+                                alertDialogBuilder.setTitle("Discard Alert!");
+
+                                // set dialog message
+                                alertDialogBuilder
+                                        .setMessage("Are you sure you want to exit?")
+                                        .setCancelable(false)
+                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                // if this button is clicked, close
+                                                // current activity
+                                                startActivity(new Intent(PublishNewOpeningActivity.this, HiringListActivity.class));
+                                                finish();
+                                            }
+                                        })
+                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                // if this button is clicked, just close
+                                                // the dialog box and do nothing
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                                // create alert dialog
+                                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                                // show it
+                                alertDialog.show();
                                 break;
                             case R.id.action_save_for_later:
                                 //
