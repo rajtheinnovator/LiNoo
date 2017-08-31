@@ -63,5 +63,12 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
 
+    <string name="spinner_title">City</string>
+    <string name="city_bengaluru">Bengaluru</string>
+    <string name="city_pune">Pune</string>
+    <string name="city_hyderabad">Hyderabad</string>
+    <string name="city_mumbai">Mumbai</string>
+    <string name="city_new_delhi">New Delhi</string>
+
 </resources>
 

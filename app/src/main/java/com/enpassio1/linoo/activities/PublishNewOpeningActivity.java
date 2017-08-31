@@ -4,10 +4,14 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.enpassio1.linoo.R;
@@ -16,6 +20,9 @@ import com.enpassio1.linoo.models.UpcomingDrives;
 import com.enpassio1.linoo.utils.InternetConnectivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PublishNewOpeningActivity extends AppCompatActivity implements DatePickerFragment.OnDateSetListener {
 
@@ -31,14 +38,15 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
     String recruitmentPlace;
     String jobPosition;
     String driveDetails;
-
+    String selectedCity;
+    List<String> cityList;
+    private Spinner citySpinner;
     /*
     * Firebase instance variables
     **/
     /*
     * firebase code referenced from: https://github.com/udacity/and-nd-firebase
     */
-
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDrivesDatabaseReference;
 
@@ -61,10 +69,19 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
                 }
             }
         });
-        hiringPlaceEditText = (EditText) findViewById(R.id.recruitment_place_edit_text);
+
+
         jobPositionEditText = (EditText) findViewById(R.id.job_position_edit_text);
         jobDescriptionEditText = (EditText) findViewById(R.id.drive_details__edit_text);
         publishButton = (Button) findViewById(R.id.publish_button);
+        citySpinner = (Spinner) findViewById(R.id.recruitment_place_spinner);
+
+        cityList = new ArrayList<String>();
+        cityList.add(getResources().getString(R.string.city_bengaluru));
+        cityList.add(getResources().getString(R.string.city_pune));
+        cityList.add(getResources().getString(R.string.city_mumbai));
+        cityList.add(getResources().getString(R.string.city_new_delhi));
+        cityList.add(getResources().getString(R.string.city_hyderabad));
 
         if (InternetConnectivity.isInternetConnected(PublishNewOpeningActivity.this)) {
             mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -75,16 +92,15 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
                 public void onClick(View view) {
                     companyName = companyNameEditText.getText().toString().trim();
                     recruitmentDate = hiringDateEditText.getText().toString().trim();
-                    recruitmentPlace = hiringPlaceEditText.getText().toString().trim();
                     jobPosition = jobPositionEditText.getText().toString().trim();
                     driveDetails = jobDescriptionEditText.getText().toString().trim();
 
+                    setupSpinner();
+                    recruitmentPlace = selectedCity;
+                    Log.v("my_tagaa", "recruitmentPlace is: " + recruitmentPlace);
+
                     if (TextUtils.isEmpty(companyName)) {
                         companyNameEditText.setError(getResources().getString(R.string.error_enter_company_name));
-                        return;
-                    }
-                    if (TextUtils.isEmpty(recruitmentPlace)) {
-                        hiringPlaceEditText.setError(getResources().getString(R.string.error_enter_recruitment_location));
                         return;
                     }
                     if (TextUtils.isEmpty(jobPosition)) {
@@ -103,7 +119,6 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
                 /* Clear input field */
                     companyNameEditText.setText("");
                     hiringDateEditText.setText("");
-                    hiringPlaceEditText.setText("");
                     jobPositionEditText.setText("");
                     jobDescriptionEditText.setText("");
                 }
@@ -113,6 +128,26 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
                     .getString(R.string.check_internet_connectivity), Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void setupSpinner() {
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, cityList);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        citySpinner.setAdapter(dataAdapter);
+        citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                selectedCity = adapterView.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+                selectedCity = cityList.get(0);
+            }
+        });
+    }
+
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {

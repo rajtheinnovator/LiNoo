@@ -54,12 +54,12 @@
             android:text="@string/heading_recruitment_location"
             android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/recruitment_place_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <Spinner
+            android:id="@+id/recruitment_place_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal" />
+            android:spinnerMode="dropdown" />
 
         <TextView
             android:id="@+id/job_position_text_view"

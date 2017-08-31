@@ -15,6 +15,9 @@ public class InternetConnectivity {
     public static boolean isInternetConnected(Context context) {
 
         isConnected = false;
+
+        //code below referenced from: https://stackoverflow.com/a/32771164/5770629
+
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork != null) { // connected to the internet

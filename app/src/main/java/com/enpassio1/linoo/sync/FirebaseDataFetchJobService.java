@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import com.enpassio1.linoo.R;
 import com.enpassio1.linoo.data.DriveContract;
 import com.enpassio1.linoo.models.UpcomingDrives;
 import com.firebase.jobdispatcher.JobParameters;
@@ -52,7 +53,8 @@ public class FirebaseDataFetchJobService extends JobService {
                 // when finished.
                 Context context = FirebaseDataFetchJobService.this;
 
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("drives");
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
+                        .child(context.getResources().getString(R.string.firebase_database_child_drives));
 
                 /* code below referenced from: https://stackoverflow.com/a/38493214/5770629 */
                 databaseReference.addValueEventListener(new ValueEventListener() {
