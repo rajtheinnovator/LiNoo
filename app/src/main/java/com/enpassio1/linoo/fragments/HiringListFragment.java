@@ -139,7 +139,8 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                 FirebaseDatabase.getInstance().getReference().child("userProfile").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                        DataSnapshot childSnapshot = dataSnapshot.getChildren().iterator().next();
+                        UserProfile userProfile = childSnapshot.getValue(UserProfile.class);
                         //do what you want with the userProfile
                         Log.v("my_tag", "email is: " + userProfile.getUsersEmail());
                         Log.v("my_tag", "" + FirebaseAuth.getInstance().getCurrentUser().getUid());
