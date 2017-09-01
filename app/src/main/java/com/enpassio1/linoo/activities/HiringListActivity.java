@@ -9,7 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class HiringListActivity extends AppCompatActivity {
 
-    String usersStatus;
+    String userStatus;
     String mTwoPane;
     String usersUid;
 
@@ -20,15 +20,16 @@ public class HiringListActivity extends AppCompatActivity {
         Bundle bundleFromAuthenticatingActivity = getIntent().getBundleExtra("bundleFromAuthenticatingActivity");
         if (bundleFromAuthenticatingActivity != null) {
             if (bundleFromAuthenticatingActivity.getString("userStatus").equals("newUser")) {
-                usersStatus = "newUser";
+                userStatus = "newUser";
             } else if (bundleFromAuthenticatingActivity.getString("userStatus").equals("oldUser")) {
-                usersStatus = "oldUser";
+                userStatus = "oldUser";
             }
         } else {
             /* if the activity is getting started after coming from some other activity than SignIn/Up, this must be a oldUSer */
-            usersStatus = "oldUser";
+            userStatus = "oldUser";
 
         }
+
         //code below referenced from: https://stackoverflow.com/a/43299619/5770629
         usersUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -40,6 +41,7 @@ public class HiringListActivity extends AppCompatActivity {
 
         Bundle bundle = new Bundle();
         bundle.putString("mTwoPane", mTwoPane);
+        bundle.putString("userStatus", userStatus);
         hiringListFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_hiring_list, hiringListFragment)

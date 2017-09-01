@@ -17,6 +17,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +34,7 @@ import com.enpassio1.linoo.adapters.UpcomingHiresListAdapter;
 import com.enpassio1.linoo.data.DriveContract;
 import com.enpassio1.linoo.data.DriveContract.DriveEntry;
 import com.enpassio1.linoo.models.UpcomingDrives;
+import com.enpassio1.linoo.models.UserProfile;
 import com.enpassio1.linoo.utils.InternetConnectivity;
 import com.enpassio1.linoo.utils.NotificationUtilities;
 import com.google.firebase.auth.FirebaseAuth;
@@ -59,14 +61,15 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
     UpcomingHiresListAdapter upcomingHiresListAdapter;
     ArrayList<UpcomingDrives> upcomingDrivesArrayList;
     NotificationManager notificationManager;
+    String userStatus;
     private ChildEventListener mChildEventListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDrivesDatabaseReference;
     private FirebaseAuth auth;
     private ArrayList<UpcomingDrives> mUpcomingDrivesArrayList;
-
     //logic for two pane layout
     private boolean mTwoPane;
+    private UserProfile mUserProfile;
 
     public HiringListFragment() {
         // Required empty public constructor
@@ -78,6 +81,9 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
         View rootView = inflater.inflate(R.layout.fragment_hiring_list, container, false);
         Bundle bundle = getArguments();
         String mTwoPaneString = bundle.getString("mTwoPane");
+
+        userStatus = bundle.getString("userStatus");
+
         if (mTwoPaneString.equals("true")) {
             mTwoPane = true;
         } else mTwoPane = false;
@@ -122,6 +128,30 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
             mFirebaseDatabase = FirebaseDatabase.getInstance();
             mDrivesDatabaseReference = mFirebaseDatabase.getReference().child(getResources()
                     .getString(R.string.firebase_database_child_drives));
+
+            if (userStatus.equals("newUser")) {
+                mUserProfile = new UserProfile("nameeee", "cityyyy", "emailllll");
+                FirebaseDatabase.getInstance().getReference().child("userProfile").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push().setValue(mUserProfile);
+
+            } else {
+
+                //code below referenced from: https://stackoverflow.com/a/38022714/5770629
+                FirebaseDatabase.getInstance().getReference().child("userProfile").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                        //do what you want with the userProfile
+                        Log.v("my_tag", "email is: " + userProfile.getUsersEmail());
+                        Log.v("my_tag", "" + FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
 
      /* code below referenced from: https://developer.android.com/training/basics/data-storage/shared-preferences.html */
 

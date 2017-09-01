@@ -16,6 +16,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activities.PublishNewOpeningActivity"
+            android:launchMode="singleTop"
             android:parentActivityName=".activities.HiringListActivity" />
         <activity
             android:name=".activities.DriveDetailsActivity"
