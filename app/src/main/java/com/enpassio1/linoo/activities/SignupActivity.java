@@ -87,7 +87,15 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                                     if (task.isSuccessful()) {
                                         // Sign in success, update UI with the signed-in user's information
                                         progressBar.setVisibility(View.GONE);
-                                        startActivity(new Intent(SignupActivity.this, HiringListActivity.class));
+                                        Intent hiringListActivityIntent = new Intent(SignupActivity.this,
+                                                HiringListActivity.class);
+                                        Bundle bundleFromAuthenticatingActivity = new Bundle();
+                                        bundleFromAuthenticatingActivity.putString("userStatus", "newUser");
+
+                                        hiringListActivityIntent.putExtra("bundleFromAuthenticatingActivity",
+                                                bundleFromAuthenticatingActivity);
+
+                                        startActivity(hiringListActivityIntent);
                                         finish();
                                     } else {
                                         // If sign up fails, display a message to the user.

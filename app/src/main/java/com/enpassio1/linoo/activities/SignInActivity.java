@@ -17,7 +17,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import static com.enpassio1.linoo.R.id.sign_in_button;
 import static com.enpassio1.linoo.R.id.sign_up_button;
@@ -79,10 +78,17 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
                                         // Sign in success, update UI with the signed-in user's information
-                                        FirebaseUser user = mAuth.getCurrentUser();
                                         progressBar.setVisibility(View.GONE);
-                                        startActivity(new Intent(SignInActivity.this, HiringListActivity.class));
+
+                                        Intent hiringListActivityIntent = new Intent(SignInActivity.this, HiringListActivity.class);
+                                        Bundle bundleFromAuthenticatingActivity = new Bundle();
+                                        bundleFromAuthenticatingActivity.putString("userStatus", "oldUser");
+
+                                        hiringListActivityIntent.putExtra("bundleFromAuthenticatingActivity", bundleFromAuthenticatingActivity);
+
+                                        startActivity(hiringListActivityIntent);
                                         finish();
+
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         Toast.makeText(SignInActivity.this, getResources()
