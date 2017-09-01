@@ -62,6 +62,7 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
     ArrayList<UpcomingDrives> upcomingDrivesArrayList;
     NotificationManager notificationManager;
     String userStatus;
+    SharedPreferences.Editor editor;
     private ChildEventListener mChildEventListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDrivesDatabaseReference;
@@ -129,6 +130,7 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
             mDrivesDatabaseReference = mFirebaseDatabase.getReference().child(getResources()
                     .getString(R.string.firebase_database_child_drives));
 
+
             if (userStatus.equals("newUser")) {
                 mUserProfile = new UserProfile("nameeee", "cityyyy", "emailllll");
                 FirebaseDatabase.getInstance().getReference().child("userProfile").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push().setValue(mUserProfile);
@@ -142,8 +144,6 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                         DataSnapshot childSnapshot = dataSnapshot.getChildren().iterator().next();
                         UserProfile userProfile = childSnapshot.getValue(UserProfile.class);
                         //do what you want with the userProfile
-                        Log.v("my_tag", "email is: " + userProfile.getUsersEmail());
-                        Log.v("my_tag", "" + FirebaseAuth.getInstance().getCurrentUser().getUid());
                     }
 
                     @Override
@@ -156,7 +156,8 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
 
      /* code below referenced from: https://developer.android.com/training/basics/data-storage/shared-preferences.html */
 
-            SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+            final SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+            editor = sharedPreferences.edit();
             if (!sharedPreferences.contains(getResources().getString(R.string.shared_preference_key))) {
 
                 //that means, the app is getting started for the first time
@@ -173,6 +174,7 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                         for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
                             UpcomingDrives upcomingDrive = areaSnapshot.getValue(UpcomingDrives.class);
 
+                            Log.v("my_tag", "areaSnapshot called");
                             ContentValues contentValues = new ContentValues();
                             contentValues.put(DriveEntry.COLUMN_COMPANY_NAME, upcomingDrive.getCompanyName());
                             contentValues.put(DriveEntry.COLUMN_DRIVE_DATE, upcomingDrive.getDriveDate());
@@ -184,6 +186,9 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
 
                             upcomingDrivesArrayList.add(upcomingDrive);
                         }
+                        editor.putInt("totalNosOfData", (int) dataSnapshot.getChildrenCount());
+                        Log.v("my_tag", "dataSnapshot.getChildrenCount() is: " + dataSnapshot.getChildrenCount());
+                        editor.apply();
                     }
 
                     @Override
@@ -193,19 +198,21 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                 });
 
             /* code below referenced from: https://developer.android.com/training/basics/data-storage/shared-preferences.html */
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+
                 editor.putString(getResources().getString(R.string.shared_preference_key),
                         getResources().getString(R.string.shared_preference_value));
                 editor.apply();
             } else {
-                mChildEventListener = new ChildEventListener() {
+
+                mDrivesDatabaseReference.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        Log.v("my_tag", "dataSnapshot.getChildrenCount() is: " + dataSnapshot.getChildrenCount());
+                        if (dataSnapshot.getChildrenCount() > sharedPreferences.getInt("totalNosOfData", 0)) {
                         UpcomingDrives upcomingDrive = dataSnapshot.getValue(UpcomingDrives.class);
                         upcomingDrivesArrayList.add(upcomingDrive);
                         upcomingHiresListAdapter.setDriveData(upcomingDrivesArrayList);
                         createNotificationForNewUpcomingDrive(upcomingDrive);
-
                         ContentValues contentValues = new ContentValues();
                         contentValues.put(DriveEntry.COLUMN_COMPANY_NAME, upcomingDrive.getCompanyName());
                         contentValues.put(DriveEntry.COLUMN_DRIVE_DATE, upcomingDrive.getDriveDate());
@@ -213,7 +220,14 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                         contentValues.put(DriveEntry.COLUMN_JOB_POSITION, upcomingDrive.getJobPosition());
                         contentValues.put(DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
                         contentValues.put(DriveEntry.COLUMN_DRIVE_KEY, dataSnapshot.getKey());
-                        Uri uri = getContext().getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
+
+                            Uri uri = getContext().getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
+                            Log.v("my_tag", "row inserted");
+                        }
+                        int totalNosOfData = (int) dataSnapshot.getChildrenCount();
+                        Log.v("my_tag", "totalNosOfData is: " + totalNosOfData);
+                        editor.putInt("totalNosOfData", totalNosOfData);
+                        editor.apply();
                     }
 
                     @Override
@@ -231,10 +245,9 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                     }
-                };
+                });
 
                 NotificationUtilities.scheduleNewDriveAddedReminder(getContext());
-                mDrivesDatabaseReference.addChildEventListener(mChildEventListener);
             }
         } else {
             Toast.makeText(getContext(), getResources()
@@ -265,7 +278,6 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
 
-
         notificationManager.notify(1410, notificationBuilder.build());
     }
 
@@ -289,6 +301,9 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.v("my_tag", "onCreateLoader called");
+        Log.i("my_tag", "onCreateLoader called");
+
         String[] projection = {
                 DriveEntry._ID,
                 DriveEntry.COLUMN_COMPANY_NAME,
@@ -311,10 +326,12 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        Log.v("my_tag", "onLoadFinished called");
+        Log.i("my_tag", "cursor size is " + cursor.getCount());
         ArrayList<UpcomingDrives> mUpcomingDrivesArrayList = new ArrayList<>();
         if (cursor != null) {
             if (cursor.moveToFirst()) {
-                while (cursor.moveToNext()) {
+                do {
 
                     int nameColumnIndex = cursor.getColumnIndex(DriveContract.DriveEntry.COLUMN_COMPANY_NAME);
                     int dateColumnIndex = cursor.getColumnIndex(DriveContract.DriveEntry.COLUMN_COMPANY_NAME);
@@ -329,15 +346,21 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                     String description = cursor.getString(jobDescriptionColumnIndex);
                     UpcomingDrives upcomingDrives = new UpcomingDrives(name, date, location, jobPosition, description);
                     mUpcomingDrivesArrayList.add(upcomingDrives);
-                }
+                } while (cursor.moveToNext());
             }
         }
         notificationManager.cancelAll();
         upcomingHiresListAdapter.setDriveData(mUpcomingDrivesArrayList);
+        editor.putInt("totalNosOfData", 0);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        Log.v("my_tag", "onLoaderReset called");
+        Log.i("my_tag", "onLoaderReset called");
+        editor.putInt("totalNosOfData", 0);
+        editor.apply();
 
+        upcomingHiresListAdapter.setDriveData(new ArrayList<UpcomingDrives>());
     }
 }
