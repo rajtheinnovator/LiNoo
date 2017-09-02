@@ -100,8 +100,7 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                         getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
         //code below referenced from: https://firebase.google.com/docs/cloud-messaging/android/send-multiple
-        FirebaseMessaging.getInstance().subscribeToTopic(getResources()
-                .getString(R.string.subscribe_to_topic_drives));
+        FirebaseMessaging.getInstance().subscribeToTopic("drives1");
 
         if (savedInstanceState == null) {
             upcomingDrivesArrayList = new ArrayList<UpcomingDrives>();
@@ -132,8 +131,7 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
         drivesListRecyclerView.setAdapter(upcomingHiresListAdapter);
         if (InternetConnectivity.isInternetConnected(getContext())) {
             mFirebaseDatabase = FirebaseDatabase.getInstance();
-            mDrivesDatabaseReference = mFirebaseDatabase.getReference().child(getResources()
-                    .getString(R.string.firebase_database_child_drives));
+            mDrivesDatabaseReference = mFirebaseDatabase.getReference().child("drives1");
 
 
             if (userStatus.equals("newUser")) {
@@ -174,11 +172,13 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                     arrayList = new ArrayList<UpcomingDrives>();
 
                     for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
-                        UpcomingDrives upcomingDrive = areaSnapshot.getValue(UpcomingDrives.class);
+                        //if we're fetching data again, then delete the old data to avoid data redundancy
+                        context.getContentResolver().delete(DriveEntry.CONTENT_URI, null, null);
                         Cursor cursor = context.getContentResolver().query(DriveEntry.CONTENT_URI, null, null, null, null);
                         Log.v("my_tag", "cursor.getCount isss" + cursor.getCount());
                         Log.v("my_tag", "datasnapshot isss: " + (int) dataSnapshot.getChildrenCount());
                         if (cursor.getCount() < (int) dataSnapshot.getChildrenCount()) {
+                            UpcomingDrives upcomingDrive = areaSnapshot.getValue(UpcomingDrives.class);
                             iterator += 1;
                             Log.v("my_tag", "iterator value isss: " + iterator);
                             arrayList.add(new UpcomingDrives(upcomingDrive.getCompanyName(), upcomingDrive.getDriveDate(), upcomingDrive.getPlace(), upcomingDrive.getJobPosition(), upcomingDrive.getDetailedDescription()));

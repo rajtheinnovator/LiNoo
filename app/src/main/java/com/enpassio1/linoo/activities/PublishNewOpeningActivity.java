@@ -87,7 +87,7 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
         setupSpinner();
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDrivesDatabaseReference = mFirebaseDatabase.getReference().child(getResources().getString(R.string.firebase_database_child_drives));
+        mDrivesDatabaseReference = mFirebaseDatabase.getReference().child("drives1");
 
         /* bottom navigation view code referenced from:
          * http://www.truiton.com/2017/01/android-bottom-navigation-bar-example/
