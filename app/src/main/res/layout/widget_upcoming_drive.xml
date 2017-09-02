@@ -14,8 +14,8 @@
         android:gravity="center_horizontal"
         android:maxLines="1"
         android:padding="8dp"
-        android:textColor="#000000"
-        android:textSize="16sp" />
+        android:textColor="@color/color_text_description"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/company_name"
@@ -24,8 +24,8 @@
         android:gravity="center_horizontal"
         android:maxLines="1"
         android:padding="8dp"
-        android:textColor="#000000"
-        android:textSize="16sp" />
+        android:textColor="@color/color_text_description"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/job_profile"
@@ -34,6 +34,6 @@
         android:gravity="center_horizontal"
         android:maxLines="1"
         android:padding="8dp"
-        android:textColor="#000000"
-        android:textSize="12sp" />
+        android:textColor="@color/color_text_view_text"
+        android:textSize="18sp" />
 </LinearLayout>

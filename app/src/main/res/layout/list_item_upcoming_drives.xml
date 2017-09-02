@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="196dp"
+    android:layout_height="112dp"
     android:layout_marginBottom="16dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="#79ffe9"
+        android:orientation="vertical"
+        android:padding="24dp">
 
         <TextView
             android:id="@+id/hiring_date_text_view"
@@ -18,7 +21,8 @@
             android:gravity="center_horizontal"
             android:maxLines="1"
             android:paddingBottom="8dp"
-            android:textSize="16sp" />
+            android:textColor="@color/color_text_description"
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/hiring_summary_text_view"
@@ -28,7 +32,8 @@
             android:ellipsize="end"
             android:gravity="fill_horizontal"
             android:maxLines="2"
-            android:textSize="14sp" />
+            android:textColor="@color/color_text_view_text"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

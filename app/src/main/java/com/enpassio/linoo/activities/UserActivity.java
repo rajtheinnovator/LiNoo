@@ -63,8 +63,6 @@ public class UserActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final String name = nameEdieText.getText().toString().trim();
                 final String city = cityEditText.getText().toString().trim();
-                nameEdieText.setText("");
-                cityEditText.setText("");
                 nameEdieText.setEnabled(false);
                 cityEditText.setEnabled(false);
 
@@ -103,6 +101,7 @@ public class UserActivity extends AppCompatActivity {
 
                             }
                         });
+
                 Toast.makeText(UserActivity.this, "Thanks for updating your details!", Toast.LENGTH_SHORT).show();
 
             }

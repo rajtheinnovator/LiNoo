@@ -14,19 +14,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_margin="16dp"
         android:text="Upcoming Drives"
-        android:textColor="#000000"
-        android:textSize="18sp" />
+        android:textColor="@color/color_text_description"
+        android:textSize="24sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view_upcoming_drive_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
+            android:layout_margin="16dp"
             android:scrollbars="horizontal" />
 
         <android.support.design.widget.FloatingActionButton
@@ -36,6 +39,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_margin="@dimen/fab_margin"
-            android:elevation="12dp" />
+            android:background="@color/colorPrimaryDark"
+            android:elevation="12dp"
+            android:src="@drawable/button_add" />
     </RelativeLayout>
 </LinearLayout>

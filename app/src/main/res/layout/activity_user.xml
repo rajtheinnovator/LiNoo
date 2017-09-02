@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
+    android:layout_gravity="top"
     android:layout_margin="16dp"
     tools:context="com.enpassio.linoo.activities.UserActivity">
 
@@ -17,36 +17,47 @@
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_text_view_text"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/user_name_edit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/color_edit_text_underline"
             android:hint="your name" />
 
         <TextView
             android:id="@+id/user_email"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_text_view_text"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/user_city_edit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/color_edit_text_underline"
             android:hint="your city" />
 
         <TextView
             android:id="@+id/user_city"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_text_view_text"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/save_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@color/color_button"
             android:text="Save"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:textColor="@color/color_button_text" />
     </LinearLayout>
 </android.support.v7.widget.CardView>
 

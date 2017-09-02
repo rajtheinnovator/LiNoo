@@ -4,6 +4,7 @@
     android:id="@+id/publish_new_opening_coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="16dp"
     android:fillViewport="true"
     android:orientation="vertical">
 
@@ -11,7 +12,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
 
         <TextView
             android:id="@+id/company_name_text_view"
@@ -20,13 +23,15 @@
             android:gravity="center_horizontal"
             android:padding="8dp"
             android:text="@string/heading_company_name"
-            android:textSize="18sp" />
+            android:textColor="@color/color_text_description"
+            android:textSize="24sp" />
 
         <EditText
             android:id="@+id/company_name_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/color_edit_text_underline"
             android:gravity="center_horizontal" />
 
         <TextView
@@ -36,30 +41,40 @@
             android:gravity="center_horizontal"
             android:padding="8dp"
             android:text="@string/heading_recruitment_date"
-            android:textSize="18sp" />
+            android:textColor="@color/color_text_description"
+            android:textSize="24sp" />
 
         <EditText
             android:id="@+id/recruitment_date_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/color_edit_text_underline"
             android:gravity="center_horizontal" />
 
-        <TextView
-            android:id="@+id/recruitment_place_text_view"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:padding="8dp"
-            android:text="@string/heading_recruitment_location"
-            android:textSize="18sp" />
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <Spinner
+            <TextView
+                android:id="@+id/recruitment_place_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:padding="8dp"
+                android:text="@string/heading_recruitment_location"
+                android:textColor="@color/color_text_description"
+                android:textSize="24sp" />
+
+            <Spinner
             android:id="@+id/recruitment_place_spinner"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
             android:spinnerMode="dropdown" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/job_position_text_view"
@@ -68,13 +83,15 @@
             android:gravity="center_horizontal"
             android:padding="8dp"
             android:text="@string/heading_job_profile"
-            android:textSize="14sp" />
+            android:textColor="@color/color_text_view_text"
+            android:textSize="24sp" />
 
         <EditText
             android:id="@+id/job_position_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/color_edit_text_underline"
             android:gravity="center_horizontal" />
 
         <TextView
@@ -84,19 +101,16 @@
             android:gravity="center_horizontal"
             android:padding="8dp"
             android:text="@string/heading_job_description"
-            android:textSize="14sp" />
+            android:textColor="@color/color_text_view_text"
+            android:textSize="24sp" />
 
         <EditText
             android:id="@+id/drive_details__edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/color_edit_text_underline"
             android:gravity="center_horizontal" />
-
-        <TextView
-            android:id="@+id/savedFile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/navigation"
@@ -116,6 +130,6 @@
             android:background="@null"
             android:text="Retrieve file from saved database?"
             android:textAllCaps="false"
-            android:textColor="#ff0000" />
+            android:textColor="@color/colorPrimaryDark" />
     </LinearLayout>
 </ScrollView>

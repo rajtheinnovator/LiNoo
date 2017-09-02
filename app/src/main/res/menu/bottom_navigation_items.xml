@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_discard"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_discard"
         android:title="@string/bottom_navigation_discard" />
     <item
         android:id="@+id/action_save_for_later"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_save_for_later"
         android:title="@string/bottom_navigation_save_offline" />
     <item
         android:id="@+id/action_publish"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_publish"
         android:title="@string/bottom_navigation_publish" />
 </menu>
