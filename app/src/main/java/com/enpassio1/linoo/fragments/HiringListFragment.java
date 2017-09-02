@@ -66,6 +66,7 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
     SharedPreferences.Editor editor;
     String areaSnapshotKey;
     int iterator;
+    ArrayList<UpcomingDrives> arrayList;
     private ChildEventListener mChildEventListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDrivesDatabaseReference;
@@ -170,7 +171,7 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                     // of the iterator returned by dataSnapshot.getChildren() to
                     // initialize the array
 
-                    ArrayList<UpcomingDrives> arrayList = new ArrayList<UpcomingDrives>();
+                    arrayList = new ArrayList<UpcomingDrives>();
 
                     for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
                         UpcomingDrives upcomingDrive = areaSnapshot.getValue(UpcomingDrives.class);
@@ -181,19 +182,19 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                             iterator += 1;
                             Log.v("my_tag", "iterator value isss: " + iterator);
                             Log.v("my_tag", "areaSnapshot called");
-
-                            arrayList = new ArrayList<UpcomingDrives>();
                             arrayList.add(new UpcomingDrives(upcomingDrive.getCompanyName(), upcomingDrive.getDriveDate(), upcomingDrive.getPlace(), upcomingDrive.getJobPosition(), upcomingDrive.getDetailedDescription()));
                             areaSnapshotKey = areaSnapshot.getKey();
+                            upcomingDrivesArrayList.add(upcomingDrive);
 
                         }
-                        upcomingDrivesArrayList.add(upcomingDrive);
+
                         cursor.close();
                     }
                     Collections.reverse(arrayList);
 
                     for (int i = 0; i <= iterator; i++) {
                         Log.v("my_tag", "iterator value is: " + iterator);
+                        Log.v("my_tag", "arrayList size is: " + arrayList.size());
                         UpcomingDrives upcomingDrive = arrayList.get(i);
                         ContentValues contentValues = new ContentValues();
                         Log.v("my_tag", "upcomingDrive.getCompanyName() is: " + upcomingDrive.getCompanyName());
