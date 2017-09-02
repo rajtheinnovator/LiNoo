@@ -205,6 +205,7 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                         contentValues.put(DriveEntry.COLUMN_JOB_POSITION, upcomingDrive.getJobPosition());
                         contentValues.put(DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
                         contentValues.put(DriveEntry.COLUMN_DRIVE_KEY, areaSnapshotKey);
+
                         createNotificationForNewUpcomingDrive(upcomingDrive);
                         Uri uri = context.getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
                         i += 1;
@@ -297,12 +298,11 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
-
                     int nameColumnIndex = cursor.getColumnIndex(DriveContract.DriveEntry.COLUMN_COMPANY_NAME);
-                    int dateColumnIndex = cursor.getColumnIndex(DriveContract.DriveEntry.COLUMN_COMPANY_NAME);
-                    int locationColumnIndex = cursor.getColumnIndex(DriveContract.DriveEntry.COLUMN_COMPANY_NAME);
-                    int jobPositionColumnIndex = cursor.getColumnIndex(DriveContract.DriveEntry.COLUMN_COMPANY_NAME);
-                    int jobDescriptionColumnIndex = cursor.getColumnIndex(DriveContract.DriveEntry.COLUMN_COMPANY_NAME);
+                    int dateColumnIndex = cursor.getColumnIndex(DriveEntry.COLUMN_DRIVE_DATE);
+                    int locationColumnIndex = cursor.getColumnIndex(DriveEntry.COLUMN_DRIVE_LOCATION);
+                    int jobPositionColumnIndex = cursor.getColumnIndex(DriveEntry.COLUMN_JOB_POSITION);
+                    int jobDescriptionColumnIndex = cursor.getColumnIndex(DriveEntry.COLUMN_JOB_DESCRIPTION);
 
                     String name = cursor.getString(nameColumnIndex);
                     String date = cursor.getString(dateColumnIndex);

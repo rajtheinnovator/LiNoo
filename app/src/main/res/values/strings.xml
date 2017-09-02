@@ -106,6 +106,8 @@
     <string name="title_activity_navigation_drawer">www.enpassio.com</string>
 
     <string name="action_settings">Settings</string>
+    <string name="dialog_alert">Discard Alert!</string>
+    <string name="sure_to_exit_message">Are you sure you want to exit?</string>
 
 </resources>
 

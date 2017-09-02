@@ -111,11 +111,11 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
                                         PublishNewOpeningActivity.this);
 
                                 // set title
-                                alertDialogBuilder.setTitle("Discard Alert!");
+                                alertDialogBuilder.setTitle(getResources().getString(R.string.dialog_alert));
 
                                 // set dialog message
                                 alertDialogBuilder
-                                        .setMessage("Are you sure you want to exit?")
+                                        .setMessage(getResources().getString(R.string.sure_to_exit_message))
                                         .setCancelable(false)
                                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
