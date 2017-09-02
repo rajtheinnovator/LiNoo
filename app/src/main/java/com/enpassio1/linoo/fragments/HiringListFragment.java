@@ -208,6 +208,7 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                         contentValues.put(DriveEntry.COLUMN_JOB_POSITION, upcomingDrive.getJobPosition());
                         contentValues.put(DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
                         contentValues.put(DriveEntry.COLUMN_DRIVE_KEY, areaSnapshotKey);
+                        createNotificationForNewUpcomingDrive(upcomingDrive);
                         Uri uri = context.getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
                         i += 1;
                     }
@@ -322,7 +323,9 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
             }
         }
         notificationManager.cancelAll();
+        Collections.reverse(mUpcomingDrivesArrayList);
         upcomingHiresListAdapter.setDriveData(mUpcomingDrivesArrayList);
+        notificationManager.cancelAll();
         mCursor = null;
     }
 
