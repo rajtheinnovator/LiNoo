@@ -78,16 +78,10 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
             public void onClick(View view) {
                 //sharedpreference code referenced from: https://stackoverflow.com/a/23024962/5770629
                 SharedPreferences sharedPreferences = getSharedPreferences("MY_PREFS_NAME", MODE_PRIVATE);
-
-
-                String description = readTextFromFile();
-
                 String companyName = sharedPreferences.getString("companyName", "");
                 String recruitmentDate = sharedPreferences.getString("recruitmentDate", "");
-                ;
                 int location = sharedPreferences.getInt("location", 0);
                 String jobProfile = sharedPreferences.getString("jobProfile", "");
-                ;
                 String jobDescription = readTextFromFile();
                 companyNameEditText.setText(companyName);
                 hiringDateEditText.setText(recruitmentDate);

@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.enpassio.linoo.activities.HiringListActivity">
     <item
+        android:id="@+id/action_user_profile"
+        android:orderInCategory="1"
+        android:title="user profile"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_sign_out"
         android:orderInCategory="100"
         android:title="sign out"

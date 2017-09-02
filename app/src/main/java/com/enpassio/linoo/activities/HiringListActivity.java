@@ -33,6 +33,7 @@ public class HiringListActivity extends AppCompatActivity {
         //code below referenced from: https://stackoverflow.com/a/43299619/5770629
         usersUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+
         HiringListFragment hiringListFragment = new HiringListFragment();
 
         if (findViewById(R.id.fragment_drive_details_container) != null) {

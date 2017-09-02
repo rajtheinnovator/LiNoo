@@ -1,6 +1,7 @@
 package com.enpassio.linoo.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -67,7 +68,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.sign_up_button:
-                String email = emailEditText.getText().toString().trim();
+                final String email = emailEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
                 if (TextUtils.isEmpty(email)) {
                     emailEditText.setError(getResources().getString(R.string.error_enter_valid_email));
@@ -94,7 +95,11 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
                                         hiringListActivityIntent.putExtra("bundleFromAuthenticatingActivity",
                                                 bundleFromAuthenticatingActivity);
-
+                                        SharedPreferences sharedPreferences = getSharedPreferences("MY_USERS_PROFILE_PREFERENCE", MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putString("email", email);
+                                        editor.putString("uId", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                        editor.apply();
                                         startActivity(hiringListActivityIntent);
                                         finish();
                                     } else {

@@ -29,6 +29,7 @@ import com.enpassio.linoo.R;
 import com.enpassio.linoo.activities.HiringListActivity;
 import com.enpassio.linoo.activities.PublishNewOpeningActivity;
 import com.enpassio.linoo.activities.SignInActivity;
+import com.enpassio.linoo.activities.UserActivity;
 import com.enpassio.linoo.adapters.UpcomingHiresListAdapter;
 import com.enpassio.linoo.data.DriveContract;
 import com.enpassio.linoo.data.DriveContract.DriveEntry;
@@ -47,6 +48,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by ABHISHEK RAJ on 8/31/2017.
@@ -85,6 +88,8 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                              Bundle savedInstanceState) {
         context = getActivity();
         View rootView = inflater.inflate(R.layout.fragment_hiring_list, container, false);
+        /* set that it has a menu */
+        setHasOptionsMenu(true);
         Bundle bundle = getArguments();
         String mTwoPaneString = bundle.getString("mTwoPane");
 
@@ -134,7 +139,11 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
             mDrivesDatabaseReference = mFirebaseDatabase.getReference().child(getResources()
                     .getString(R.string.firebase_database_child_drives));
             if (userStatus.equals("newUser")) {
-                mUserProfile = new UserProfile("testName", "testCity", "testEmail");
+                SharedPreferences sharedPreferences = context.getSharedPreferences("MY_USERS_PROFILE_PREFERENCE", MODE_PRIVATE);
+                String name = sharedPreferences.getString("name", "");
+                String city = sharedPreferences.getString("city", "");
+                String email = sharedPreferences.getString("email", "");
+                mUserProfile = new UserProfile(name, city, email);
                 FirebaseDatabase.getInstance().getReference().child("userProfile").child(FirebaseAuth
                         .getInstance().getCurrentUser().getUid()).push().setValue(mUserProfile);
 
@@ -147,6 +156,12 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 DataSnapshot childSnapshot = dataSnapshot.getChildren().iterator().next();
                                 UserProfile userProfile = childSnapshot.getValue(UserProfile.class);
+                                SharedPreferences sharedPreferences = context.getSharedPreferences("MY_USERS_PROFILE_PREFERENCE", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("email", userProfile.getUsersEmail());
+                                editor.putString("city", userProfile.getUsersCity());
+                                editor.putString("name", userProfile.getUsersName());
+                                editor.apply();
 
                         /* do what you want with the userProfile like showing a user profile
                          * through navigation drawer or others
@@ -263,9 +278,22 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
 
         if (id == R.id.action_sign_out) {
             auth.signOut();
+            SharedPreferences sharedPreferences = context.getSharedPreferences("MY_USERS_PROFILE_PREFERENCE", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove("email");
+            editor.remove("city");
+            editor.remove("name");
+            editor.apply();
             upcomingHiresListAdapter.setDriveData(null);
             startActivity(new Intent(getContext(), SignInActivity.class));
             getActivity().finish();
+        }
+        if (id == R.id.action_user_profile) {
+            Intent userProfileIntent = new Intent(getActivity(), UserActivity.class);
+            Bundle userStatusBundle = new Bundle();
+            userStatusBundle.putString("userStatus", userStatus);
+            userProfileIntent.putExtra("userStatusBundle", userStatusBundle);
+            startActivity(userProfileIntent);
         }
         return super.onOptionsItemSelected(item);
     }

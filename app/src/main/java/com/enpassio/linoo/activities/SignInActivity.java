@@ -1,6 +1,7 @@
 package com.enpassio.linoo.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -83,9 +84,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                                         Intent hiringListActivityIntent = new Intent(SignInActivity.this, HiringListActivity.class);
                                         Bundle bundleFromAuthenticatingActivity = new Bundle();
                                         bundleFromAuthenticatingActivity.putString("userStatus", "oldUser");
-
                                         hiringListActivityIntent.putExtra("bundleFromAuthenticatingActivity", bundleFromAuthenticatingActivity);
-
+                                        SharedPreferences sharedPreferences = getSharedPreferences("MY_USERS_PROFILE_PREFERENCE", MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putString("email", "email");
+                                        editor.putString("uId", FirebaseAuth.getInstance().getCurrentUser().getUid());
                                         startActivity(hiringListActivityIntent);
                                         finish();
 
