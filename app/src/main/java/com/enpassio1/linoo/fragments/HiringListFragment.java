@@ -47,6 +47,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by ABHISHEK RAJ on 8/31/2017.
@@ -63,6 +64,8 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
     NotificationManager notificationManager;
     String userStatus;
     SharedPreferences.Editor editor;
+    String areaSnapshotKey;
+    int iterator;
     private ChildEventListener mChildEventListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDrivesDatabaseReference;
@@ -155,95 +158,61 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
 
             }
 
-     /* code below referenced from: https://developer.android.com/training/basics/data-storage/shared-preferences.html */
-
-            final SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-            editor = sharedPreferences.edit();
-
-            if (!sharedPreferences.contains(getResources().getString(R.string.shared_preference_key))) {
-                Log.v("my_tag", "preference is: " + sharedPreferences.contains(getResources().getString(R.string.shared_preference_key)));
-                //that means, the app is getting started for the first time
-                //so, load directly from the firebase database
+            //that means, the app is getting started for the first time
+            //so, load directly from the firebase database
 
             /* code below referenced from: https://stackoverflow.com/a/38493214/5770629 */
 
-                mDrivesDatabaseReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // Is better to use a List, because you don't know the size
-                        // of the iterator returned by dataSnapshot.getChildren() to
-                        // initialize the array
-                        for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
-                            UpcomingDrives upcomingDrive = areaSnapshot.getValue(UpcomingDrives.class);
-                            Cursor cursor = context.getContentResolver().query(DriveEntry.CONTENT_URI, null, null, null, null);
-                            if (cursor.getCount() < dataSnapshot.getChildrenCount()) {
+            mDrivesDatabaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // Is better to use a List, because you don't know the size
+                    // of the iterator returned by dataSnapshot.getChildren() to
+                    // initialize the array
+
+                    ArrayList<UpcomingDrives> arrayList = new ArrayList<UpcomingDrives>();
+
+                    for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
+                        UpcomingDrives upcomingDrive = areaSnapshot.getValue(UpcomingDrives.class);
+                        Cursor cursor = context.getContentResolver().query(DriveEntry.CONTENT_URI, null, null, null, null);
+                        Log.v("my_tag", "cursor.getCount isss" + cursor.getCount());
+                        Log.v("my_tag", "datasnapshot isss: " + (int) dataSnapshot.getChildrenCount());
+                        if (cursor.getCount() < (int) dataSnapshot.getChildrenCount()) {
+                            iterator += 1;
+                            Log.v("my_tag", "iterator value isss: " + iterator);
                             Log.v("my_tag", "areaSnapshot called");
-                            ContentValues contentValues = new ContentValues();
-                            contentValues.put(DriveEntry.COLUMN_COMPANY_NAME, upcomingDrive.getCompanyName());
-                            contentValues.put(DriveEntry.COLUMN_DRIVE_DATE, upcomingDrive.getDriveDate());
-                            contentValues.put(DriveEntry.COLUMN_DRIVE_LOCATION, upcomingDrive.getPlace());
-                            contentValues.put(DriveEntry.COLUMN_JOB_POSITION, upcomingDrive.getJobPosition());
-                            contentValues.put(DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
-                            contentValues.put(DriveEntry.COLUMN_DRIVE_KEY, areaSnapshot.getKey());
 
-                                Uri uri = context.getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
-                                cursor.close();
-                            }
+                            arrayList = new ArrayList<UpcomingDrives>();
+                            arrayList.add(new UpcomingDrives(upcomingDrive.getCompanyName(), upcomingDrive.getDriveDate(), upcomingDrive.getPlace(), upcomingDrive.getJobPosition(), upcomingDrive.getDetailedDescription()));
+                            areaSnapshotKey = areaSnapshot.getKey();
 
-                            upcomingDrivesArrayList.add(upcomingDrive);
                         }
+                        upcomingDrivesArrayList.add(upcomingDrive);
+                        cursor.close();
+                    }
+                    Collections.reverse(arrayList);
 
+                    for (int i = 0; i <= iterator; i++) {
+                        Log.v("my_tag", "iterator value is: " + iterator);
+                        UpcomingDrives upcomingDrive = arrayList.get(i);
+                        ContentValues contentValues = new ContentValues();
+                        Log.v("my_tag", "upcomingDrive.getCompanyName() is: " + upcomingDrive.getCompanyName());
+                        contentValues.put(DriveEntry.COLUMN_COMPANY_NAME, upcomingDrive.getCompanyName());
+                        contentValues.put(DriveEntry.COLUMN_DRIVE_DATE, upcomingDrive.getDriveDate());
+                        contentValues.put(DriveEntry.COLUMN_DRIVE_LOCATION, upcomingDrive.getPlace());
+                        contentValues.put(DriveEntry.COLUMN_JOB_POSITION, upcomingDrive.getJobPosition());
+                        contentValues.put(DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
+                        contentValues.put(DriveEntry.COLUMN_DRIVE_KEY, areaSnapshotKey);
+                        Uri uri = context.getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
                     }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                }
 
-                    }
-                });
-            /* code below referenced from: https://developer.android.com/training/basics/data-storage/shared-preferences.html */
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-                editor.putString(getResources().getString(R.string.shared_preference_key),
-                        getResources().getString(R.string.shared_preference_value));
-                editor.apply();
-            } else {
-                mDrivesDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                        for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
-
-                            Cursor cursor = getActivity().getContentResolver().query(DriveEntry.CONTENT_URI, null, null, null, null);
-
-                            Log.v("my_taggg", "dataSnapshot.getChildrenCount()" + dataSnapshot.getChildrenCount());
-                            Log.v("my_taggg", "cursor.getCount()" + cursor.getCount());
-                            if (cursor.getCount() < dataSnapshot.getChildrenCount()) {
-                                UpcomingDrives upcomingDrive = areaSnapshot.getValue(UpcomingDrives.class);
-                                upcomingDrivesArrayList.add(upcomingDrive);
-                                upcomingHiresListAdapter.setDriveData(upcomingDrivesArrayList);
-                                createNotificationForNewUpcomingDrive(upcomingDrive);
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put(DriveEntry.COLUMN_COMPANY_NAME, upcomingDrive.getCompanyName());
-                                contentValues.put(DriveEntry.COLUMN_DRIVE_DATE, upcomingDrive.getDriveDate());
-                                contentValues.put(DriveEntry.COLUMN_DRIVE_LOCATION, upcomingDrive.getPlace());
-                                contentValues.put(DriveEntry.COLUMN_JOB_POSITION, upcomingDrive.getJobPosition());
-                                contentValues.put(DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
-                                contentValues.put(DriveEntry.COLUMN_DRIVE_KEY, dataSnapshot.getKey());
-                                Uri uri = getContext().getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
-                            }
-                            cursor.close();
-                        }
-
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-                NotificationUtilities.scheduleNewDriveAddedReminder(getContext());
-            }
+                }
+            });
         } else {
             Toast.makeText(getContext(), getResources()
                     .getString(R.string.check_internet_connectivity), Toast.LENGTH_SHORT).show();
@@ -254,6 +223,7 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
 
         return rootView;
     }
+
 
     private void createNotificationForNewUpcomingDrive(UpcomingDrives upcomingDrives) {
         /*
@@ -345,16 +315,12 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
             }
         }
         notificationManager.cancelAll();
-        upcomingHiresListAdapter.setDriveData(mUpcomingDrivesArrayList);
-        editor.putInt("totalNosOfData", 0);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         Log.v("my_tag", "onLoaderReset called");
         Log.i("my_tag", "onLoaderReset called");
-        editor.putInt("totalNosOfData", 0);
-        editor.apply();
 
         upcomingHiresListAdapter.setDriveData(new ArrayList<UpcomingDrives>());
     }
