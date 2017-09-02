@@ -143,21 +143,21 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                 FirebaseDatabase.getInstance().getReference().child("userProfile").child(FirebaseAuth
                         .getInstance().getCurrentUser().getUid())
                         .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        DataSnapshot childSnapshot = dataSnapshot.getChildren().iterator().next();
-                        UserProfile userProfile = childSnapshot.getValue(UserProfile.class);
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                DataSnapshot childSnapshot = dataSnapshot.getChildren().iterator().next();
+                                UserProfile userProfile = childSnapshot.getValue(UserProfile.class);
 
                         /* do what you want with the userProfile like showing a user profile
                          * through navigation drawer or others
                          */
-                    }
+                            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
+                            }
+                        });
 
             }
 
@@ -234,20 +234,22 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
         code below referenced from: https://www.survivingwithandroid.com/2016/09/android-firebase-push-notification.html
         */
         //  Create Notification
-        Intent intent = new Intent(getActivity(), HiringListActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 1410,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (getActivity() != null) {
+            Intent intent = new Intent(getActivity(), HiringListActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 1410,
+                    intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder notificationBuilder = new
-                NotificationCompat.Builder(getContext())
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(getResources().getString(R.string.notification_title))
-                .setContentText(upcomingDrives.getDetailedDescription())
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent);
+            NotificationCompat.Builder notificationBuilder = new
+                    NotificationCompat.Builder(getContext())
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(getResources().getString(R.string.notification_title))
+                    .setContentText(upcomingDrives.getDetailedDescription())
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent);
 
-        notificationManager.notify(1410, notificationBuilder.build());
+            notificationManager.notify(1410, notificationBuilder.build());
+        }
     }
 
     @Override
