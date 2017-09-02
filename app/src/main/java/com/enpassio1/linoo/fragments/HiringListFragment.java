@@ -79,6 +79,7 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        final Context context = getActivity();
         View rootView = inflater.inflate(R.layout.fragment_hiring_list, container, false);
         Bundle bundle = getArguments();
         String mTwoPaneString = bundle.getString("mTwoPane");
@@ -158,8 +159,9 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
 
             final SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
             editor = sharedPreferences.edit();
-            if (!sharedPreferences.contains(getResources().getString(R.string.shared_preference_key))) {
 
+            if (!sharedPreferences.contains(getResources().getString(R.string.shared_preference_key))) {
+                Log.v("my_tag", "preference is: " + sharedPreferences.contains(getResources().getString(R.string.shared_preference_key)));
                 //that means, the app is getting started for the first time
                 //so, load directly from the firebase database
 
@@ -173,7 +175,8 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                         // initialize the array
                         for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
                             UpcomingDrives upcomingDrive = areaSnapshot.getValue(UpcomingDrives.class);
-
+                            Cursor cursor = context.getContentResolver().query(DriveEntry.CONTENT_URI, null, null, null, null);
+                            if (cursor.getCount() < dataSnapshot.getChildrenCount()) {
                             Log.v("my_tag", "areaSnapshot called");
                             ContentValues contentValues = new ContentValues();
                             contentValues.put(DriveEntry.COLUMN_COMPANY_NAME, upcomingDrive.getCompanyName());
@@ -182,13 +185,14 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                             contentValues.put(DriveEntry.COLUMN_JOB_POSITION, upcomingDrive.getJobPosition());
                             contentValues.put(DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
                             contentValues.put(DriveEntry.COLUMN_DRIVE_KEY, areaSnapshot.getKey());
-                            Uri uri = getContext().getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
+
+                                Uri uri = context.getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
+                                cursor.close();
+                            }
 
                             upcomingDrivesArrayList.add(upcomingDrive);
                         }
-                        editor.putInt("totalNosOfData", (int) dataSnapshot.getChildrenCount());
-                        Log.v("my_tag", "dataSnapshot.getChildrenCount() is: " + dataSnapshot.getChildrenCount());
-                        editor.apply();
+
                     }
 
                     @Override
@@ -196,57 +200,48 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
 
                     }
                 });
-
             /* code below referenced from: https://developer.android.com/training/basics/data-storage/shared-preferences.html */
 
                 editor.putString(getResources().getString(R.string.shared_preference_key),
                         getResources().getString(R.string.shared_preference_value));
                 editor.apply();
             } else {
-
-                mDrivesDatabaseReference.addChildEventListener(new ChildEventListener() {
+                mDrivesDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Log.v("my_tag", "dataSnapshot.getChildrenCount() is: " + dataSnapshot.getChildrenCount());
-                        if (dataSnapshot.getChildrenCount() > sharedPreferences.getInt("totalNosOfData", 0)) {
-                        UpcomingDrives upcomingDrive = dataSnapshot.getValue(UpcomingDrives.class);
-                        upcomingDrivesArrayList.add(upcomingDrive);
-                        upcomingHiresListAdapter.setDriveData(upcomingDrivesArrayList);
-                        createNotificationForNewUpcomingDrive(upcomingDrive);
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put(DriveEntry.COLUMN_COMPANY_NAME, upcomingDrive.getCompanyName());
-                        contentValues.put(DriveEntry.COLUMN_DRIVE_DATE, upcomingDrive.getDriveDate());
-                        contentValues.put(DriveEntry.COLUMN_DRIVE_LOCATION, upcomingDrive.getPlace());
-                        contentValues.put(DriveEntry.COLUMN_JOB_POSITION, upcomingDrive.getJobPosition());
-                        contentValues.put(DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
-                        contentValues.put(DriveEntry.COLUMN_DRIVE_KEY, dataSnapshot.getKey());
+                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            Uri uri = getContext().getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
-                            Log.v("my_tag", "row inserted");
+
+                        for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
+
+                            Cursor cursor = getActivity().getContentResolver().query(DriveEntry.CONTENT_URI, null, null, null, null);
+
+                            Log.v("my_taggg", "dataSnapshot.getChildrenCount()" + dataSnapshot.getChildrenCount());
+                            Log.v("my_taggg", "cursor.getCount()" + cursor.getCount());
+                            if (cursor.getCount() < dataSnapshot.getChildrenCount()) {
+                                UpcomingDrives upcomingDrive = areaSnapshot.getValue(UpcomingDrives.class);
+                                upcomingDrivesArrayList.add(upcomingDrive);
+                                upcomingHiresListAdapter.setDriveData(upcomingDrivesArrayList);
+                                createNotificationForNewUpcomingDrive(upcomingDrive);
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put(DriveEntry.COLUMN_COMPANY_NAME, upcomingDrive.getCompanyName());
+                                contentValues.put(DriveEntry.COLUMN_DRIVE_DATE, upcomingDrive.getDriveDate());
+                                contentValues.put(DriveEntry.COLUMN_DRIVE_LOCATION, upcomingDrive.getPlace());
+                                contentValues.put(DriveEntry.COLUMN_JOB_POSITION, upcomingDrive.getJobPosition());
+                                contentValues.put(DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
+                                contentValues.put(DriveEntry.COLUMN_DRIVE_KEY, dataSnapshot.getKey());
+                                Uri uri = getContext().getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
+                            }
+                            cursor.close();
                         }
-                        int totalNosOfData = (int) dataSnapshot.getChildrenCount();
-                        Log.v("my_tag", "totalNosOfData is: " + totalNosOfData);
-                        editor.putInt("totalNosOfData", totalNosOfData);
-                        editor.apply();
-                    }
 
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    }
 
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
+
                     }
                 });
-
                 NotificationUtilities.scheduleNewDriveAddedReminder(getContext());
             }
         } else {
