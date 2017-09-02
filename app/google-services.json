@@ -52,17 +52,17 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:184583154677:android:03778e888abee612",
+        "mobilesdk_app_id": "1:184583154677:android:ba9f94fdfc26ea4c",
         "android_client_info": {
-          "package_name": "com.enpassio1.linoo"
+          "package_name": "com.enpassio.linoo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "184583154677-ts2e59bhr7ue42p439m2hthqngd9u4da.apps.googleusercontent.com",
+          "client_id": "184583154677-rc8oipa7rn7ink53asqg9u70na0m4lpm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.enpassio1.linoo",
+            "package_name": "com.enpassio.linoo",
             "certificate_hash": "5e25afaac4019511a6b48469d01dce47483e03a6"
           }
         },
