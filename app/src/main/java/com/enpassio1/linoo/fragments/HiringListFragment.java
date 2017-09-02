@@ -181,7 +181,6 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                         if (cursor.getCount() < (int) dataSnapshot.getChildrenCount()) {
                             iterator += 1;
                             Log.v("my_tag", "iterator value isss: " + iterator);
-                            Log.v("my_tag", "areaSnapshot called");
                             arrayList.add(new UpcomingDrives(upcomingDrive.getCompanyName(), upcomingDrive.getDriveDate(), upcomingDrive.getPlace(), upcomingDrive.getJobPosition(), upcomingDrive.getDetailedDescription()));
                             areaSnapshotKey = areaSnapshot.getKey();
                             upcomingDrivesArrayList.add(upcomingDrive);
@@ -192,9 +191,14 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                     }
                     Collections.reverse(arrayList);
 
-                    for (int i = 0; i <= iterator; i++) {
+                    int i = 0;
+                    while (i < iterator) {
+
                         Log.v("my_tag", "iterator value is: " + iterator);
                         Log.v("my_tag", "arrayList size is: " + arrayList.size());
+                        if (i == arrayList.size()) {
+                            return;
+                        }
                         UpcomingDrives upcomingDrive = arrayList.get(i);
                         ContentValues contentValues = new ContentValues();
                         Log.v("my_tag", "upcomingDrive.getCompanyName() is: " + upcomingDrive.getCompanyName());
@@ -205,7 +209,10 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                         contentValues.put(DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
                         contentValues.put(DriveEntry.COLUMN_DRIVE_KEY, areaSnapshotKey);
                         Uri uri = context.getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
+                        i += 1;
                     }
+                    iterator = 0;
+                    i = 0;
 
                 }
 
@@ -220,8 +227,6 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
         }
         //finally, start the loader and load data from it
         getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
-
-
         return rootView;
     }
 
@@ -292,6 +297,7 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        Cursor mCursor = cursor;
         Log.v("my_tag", "onLoadFinished called");
         Log.i("my_tag", "cursor size is " + cursor.getCount());
         ArrayList<UpcomingDrives> mUpcomingDrivesArrayList = new ArrayList<>();
@@ -316,6 +322,8 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
             }
         }
         notificationManager.cancelAll();
+        upcomingHiresListAdapter.setDriveData(mUpcomingDrivesArrayList);
+        mCursor = null;
     }
 
     @Override
