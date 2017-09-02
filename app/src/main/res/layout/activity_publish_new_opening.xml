@@ -93,6 +93,11 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal" />
 
+        <TextView
+            android:id="@+id/savedFile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/navigation"
             android:layout_width="match_parent"
@@ -103,5 +108,14 @@
             app:itemIconTint="@drawable/nav_item_color_state"
             app:itemTextColor="@drawable/nav_item_color_state"
             app:menu="@menu/bottom_navigation_items" />
+
+        <Button
+            android:id="@+id/retrieve_file_from_saved_database"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:text="Retrieve file from saved database?"
+            android:textAllCaps="false"
+            android:textColor="#ff0000" />
     </LinearLayout>
 </ScrollView>
