@@ -27,6 +27,8 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
 
     private static ArrayList<UpcomingDrives> mUpcomingDrivesArrayList;
     private static boolean mTwoPaneStatus;
+    private static DriveDetailsFragment driveDetailsFragment;
+    Context context;
     /* Store the context for easy access */
     private Context mContext;
     private UpcomingDrives mUpcomingDrives;
@@ -45,7 +47,7 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
 
     @Override
     public UpcomingHiresListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         /* Inflate the custom layout */
@@ -65,6 +67,20 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
          */
         viewHolder.hiringDateTextView.setText(currentDrives.getDriveDate());
         viewHolder.hiringSummaryTextView.setText(currentDrives.getDetailedDescription());
+        if (mTwoPaneStatus && driveDetailsFragment == null) {
+            /* if the recyclerView hasnot been clicked, then inflate the detailsFragment with the
+             * first child of it
+             */
+            UpcomingDrives currentUpcomingDrives = mUpcomingDrivesArrayList.get(0);
+            DriveDetailsFragment driveDetailsFragment = new DriveDetailsFragment();
+            Bundle driveDetailsBundle = new Bundle();
+            driveDetailsBundle.putParcelable(context.getResources()
+                    .getString(R.string.current_upcoming_drive_key), currentUpcomingDrives);
+            driveDetailsFragment.setArguments(driveDetailsBundle);
+            ((HiringListActivity) context).getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_drive_details_container, driveDetailsFragment)
+                    .commit();
+        }
     }
 
     @Override
@@ -119,7 +135,7 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
 
         /*The codes below and at some other places throughout the app related to RecyclerView has been
         * taken from multiple sources on the web including from the following @link:
-        * "https://guides.codepath.com/android/using-the-recyclerview
+        * https://guides.codepath.com/android/using-the-recyclerview
         */
         /* Handles the row being being clicked */
         @Override
@@ -139,7 +155,7 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
                             .getString(R.string.drive_details_bundle_key), driveDetailsBundle);
                     context.startActivity(drivesDetailIntent);
                 } else {
-                    DriveDetailsFragment driveDetailsFragment = new DriveDetailsFragment();
+                    driveDetailsFragment = new DriveDetailsFragment();
                     Bundle driveDetailsBundle = new Bundle();
                     driveDetailsBundle.putParcelable(context.getResources()
                             .getString(R.string.current_upcoming_drive_key), currentUpcomingDrives);
@@ -148,7 +164,6 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
                             .replace(R.id.fragment_drive_details_container, driveDetailsFragment)
                             .commit();
                 }
-
             }
         }
     }
