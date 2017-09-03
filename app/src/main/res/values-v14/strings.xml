@@ -12,4 +12,5 @@
     <string name="heading_upcoming_drive">Upcoming Drives</string>
     <string name="action_user_profile">user profile</string>
     <string name="action_signout">sign out</string>
+    <string name="profile_updated">Thanks for updating your details!</string>
 </resources>

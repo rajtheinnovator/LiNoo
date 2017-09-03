@@ -11,7 +11,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -225,7 +224,6 @@ public class PublishNewOpeningActivity extends AppCompatActivity implements Date
             fOut.flush();
             fOut.close();
         } catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
         }
     }
 

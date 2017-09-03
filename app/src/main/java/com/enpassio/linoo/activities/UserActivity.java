@@ -102,7 +102,7 @@ public class UserActivity extends AppCompatActivity {
                             }
                         });
 
-                Toast.makeText(UserActivity.this, "Thanks for updating your details!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserActivity.this, getResources().getString(R.string.profile_updated), Toast.LENGTH_SHORT).show();
 
             }
         });
