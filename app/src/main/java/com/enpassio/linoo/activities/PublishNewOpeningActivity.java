@@ -40,21 +40,20 @@ import java.util.List;
 
 public class PublishNewOpeningActivity extends AppCompatActivity implements DatePickerFragment.OnDateSetListener {
 
-    EditText companyNameEditText;
-    EditText hiringDateEditText;
-    EditText hiringPlaceEditText;
-    EditText jobPositionEditText;
-    EditText jobDescriptionEditText;
-
-    String companyName;
-    String recruitmentDate;
-    String recruitmentPlace;
-    String jobPosition;
-    String driveDetails;
     String selectedCity;
-    List<String> cityList;
-    Button showSavedDataButton;
-    int spinnerPosition;
+    private EditText companyNameEditText;
+    private EditText hiringDateEditText;
+    private EditText hiringPlaceEditText;
+    private EditText jobPositionEditText;
+    private EditText jobDescriptionEditText;
+    private String companyName;
+    private String recruitmentDate;
+    private String recruitmentPlace;
+    private String jobPosition;
+    private String driveDetails;
+    private List<String> cityList;
+    private Button showSavedDataButton;
+    private int spinnerPosition;
     private Spinner citySpinner;
     /*
     * firebase code referenced from: https://github.com/udacity/and-nd-firebase

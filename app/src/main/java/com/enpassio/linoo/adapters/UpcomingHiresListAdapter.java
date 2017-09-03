@@ -19,6 +19,10 @@ import com.enpassio.linoo.models.UpcomingDrives;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created by ABHISHEK RAJ on 8/26/2017.
  */
@@ -28,7 +32,7 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
     private static ArrayList<UpcomingDrives> mUpcomingDrivesArrayList;
     private static boolean mTwoPaneStatus;
     private static DriveDetailsFragment driveDetailsFragment;
-    Context context;
+    private Context context;
     /* Store the context for easy access */
     private Context mContext;
     private UpcomingDrives mUpcomingDrives;
@@ -107,13 +111,15 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
      Provide a direct reference to each of the views within a data item
      Used to cache the views within the item layout for fast access
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         /*
         Your holder should contain a member variable
         for any view that will be set as you render a row
         */
-        public final TextView hiringDateTextView;
-        public final TextView hiringSummaryTextView;
+        @BindView(R.id.hiring_date_text_view)
+        TextView hiringDateTextView;
+        @BindView(R.id.hiring_summary_text_view)
+        TextView hiringSummaryTextView;
         Context context;
 
         /*
@@ -126,11 +132,8 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
             to access the context from any ViewHolder instance.
             */
             super(itemView);
-            hiringDateTextView = (TextView) itemView.findViewById(R.id.hiring_date_text_view);
-            hiringSummaryTextView = (TextView) itemView.findViewById(R.id.hiring_summary_text_view);
+            ButterKnife.bind(this, itemView);
             this.context = context;
-            /* Attach a click listener to the entire row view */
-            itemView.setOnClickListener(this);
         }
 
         /*The codes below and at some other places throughout the app related to RecyclerView has been
@@ -138,8 +141,9 @@ public class UpcomingHiresListAdapter extends RecyclerView.Adapter<UpcomingHires
         * https://guides.codepath.com/android/using-the-recyclerview
         */
         /* Handles the row being being clicked */
-        @Override
-        public void onClick(View view) {
+
+        @OnClick(R.id.list_item)
+        public void listItemClicked() {
             int position = getAdapterPosition(); // gets item position
             if (position != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
                 UpcomingDrives currentUpcomingDrives = mUpcomingDrivesArrayList.get(position);

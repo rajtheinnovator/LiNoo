@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserActivity extends AppCompatActivity {
-    EditText nameEdieText;
-    EditText cityEditText;
-    Button save_button;
+    private EditText nameEdieText;
+    private EditText cityEditText;
+    private Button save_button;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDrivesDatabaseReference;
 

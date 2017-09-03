@@ -7,16 +7,19 @@ import com.enpassio.linoo.R;
 import com.enpassio.linoo.fragments.HiringListFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
+import butterknife.ButterKnife;
+
 public class HiringListActivity extends AppCompatActivity {
 
-    String userStatus;
-    String mTwoPane;
-    String usersUid;
+    private String userStatus;
+    private String mTwoPane;
+    private String usersUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hiring_list);
+        ButterKnife.bind(this);
         Bundle bundleFromAuthenticatingActivity = getIntent().getBundleExtra("bundleFromAuthenticatingActivity");
         if (bundleFromAuthenticatingActivity != null) {
             if (bundleFromAuthenticatingActivity.getString("userStatus").equals("newUser")) {

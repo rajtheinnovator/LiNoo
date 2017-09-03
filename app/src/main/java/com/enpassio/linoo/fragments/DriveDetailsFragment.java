@@ -10,15 +10,28 @@ import android.widget.TextView;
 import com.enpassio.linoo.R;
 import com.enpassio.linoo.models.UpcomingDrives;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by ABHISHEK RAJ on 8/31/2017.
  */
 
 public class DriveDetailsFragment extends Fragment {
+
+    @BindView(R.id.company_name_text_view)
     TextView companyNameTextView;
+
+    @BindView(R.id.hiring_date_text_view)
     TextView hiringDateTextView;
+
+    @BindView(R.id.hiring_place_text_view)
     TextView hiringLocationTextView;
+
+    @BindView(R.id.job_title_text_view)
     TextView hiringPositionTextView;
+
+    @BindView(R.id.job_description_text_view)
     TextView driveDetailsTextView;
 
     public DriveDetailsFragment() {
@@ -29,17 +42,10 @@ public class DriveDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_drive_details, container, false);
-
+        ButterKnife.bind(this, rootView);
         Bundle driveDetailsBundle = getArguments();
         UpcomingDrives currentUpcomingDrive = driveDetailsBundle.getParcelable
                 (getResources().getString(R.string.current_upcoming_drive_key));
-
-        //instantiate the views
-        companyNameTextView = (TextView) rootView.findViewById(R.id.company_name_text_view);
-        hiringDateTextView = (TextView) rootView.findViewById(R.id.hiring_date_text_view);
-        hiringLocationTextView = (TextView) rootView.findViewById(R.id.hiring_place_text_view);
-        hiringPositionTextView = (TextView) rootView.findViewById(R.id.job_title_text_view);
-        driveDetailsTextView = (TextView) rootView.findViewById(R.id.job_description_text_view);
 
         //inflate the views
         companyNameTextView.setText(currentUpcomingDrive.getCompanyName());

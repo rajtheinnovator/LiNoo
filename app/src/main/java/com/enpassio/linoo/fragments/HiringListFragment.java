@@ -49,6 +49,9 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static android.content.Context.MODE_PRIVATE;
 
 /**
@@ -59,16 +62,17 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
 
     // Which loader is running can be known using this static variable
     private static final int LOADER_ID = 0;
+    @BindView(R.id.recycler_view_upcoming_drive_list)
     RecyclerView drivesListRecyclerView;
-    LinearLayoutManager drivesListLinearLayoutManager;
-    UpcomingHiresListAdapter upcomingHiresListAdapter;
-    ArrayList<UpcomingDrives> upcomingDrivesArrayList;
-    NotificationManager notificationManager;
-    String userStatus;
-    SharedPreferences.Editor editor;
-    String areaSnapshotKey;
-    int iterator;
-    ArrayList<UpcomingDrives> arrayList;
+    private LinearLayoutManager drivesListLinearLayoutManager;
+    private UpcomingHiresListAdapter upcomingHiresListAdapter;
+    private ArrayList<UpcomingDrives> upcomingDrivesArrayList;
+    private NotificationManager notificationManager;
+    private String userStatus;
+    private SharedPreferences.Editor editor;
+    private String areaSnapshotKey;
+    private int iterator;
+    private ArrayList<UpcomingDrives> arrayList;
     private ChildEventListener mChildEventListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDrivesDatabaseReference;
@@ -88,6 +92,7 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                              Bundle savedInstanceState) {
         context = getActivity();
         View rootView = inflater.inflate(R.layout.fragment_hiring_list, container, false);
+        ButterKnife.bind(this, rootView);
         /* set that it has a menu */
         setHasOptionsMenu(true);
         Bundle bundle = getArguments();
@@ -107,9 +112,8 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
         //code below referenced from: https://firebase.google.com/docs/cloud-messaging/android/send-multiple
         FirebaseMessaging.getInstance().subscribeToTopic("drives1");
 
-        if (savedInstanceState == null) {
-            upcomingDrivesArrayList = new ArrayList<UpcomingDrives>();
-        }
+        upcomingDrivesArrayList = new ArrayList<UpcomingDrives>();
+
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +128,6 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
         /* code below referenced from my previous project at the following link:
         * https://github.com/rajtheinnovator/Project-2-ShowMyShow/
         */
-        drivesListRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_upcoming_drive_list);
         drivesListLinearLayoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
 
@@ -221,8 +224,10 @@ public class HiringListFragment extends Fragment implements LoaderManager.Loader
                         contentValues.put(DriveEntry.COLUMN_JOB_DESCRIPTION, upcomingDrive.getDetailedDescription());
                         contentValues.put(DriveEntry.COLUMN_DRIVE_KEY, areaSnapshotKey);
 
-                        createNotificationForNewUpcomingDrive(upcomingDrive);
                         Uri uri = context.getContentResolver().insert(DriveContract.DriveEntry.CONTENT_URI, contentValues);
+                        if (uri != null) {
+                            createNotificationForNewUpcomingDrive(upcomingDrive);
+                        }
                         i += 1;
                     }
                     iterator = 0;
