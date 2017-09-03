@@ -55,6 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:background="@color/color_button"
+            android:contentDescription="@string/button_for_saving_user_profile_data"
             android:text="Save"
             android:textAllCaps="false"
             android:textColor="@color/color_button_text" />

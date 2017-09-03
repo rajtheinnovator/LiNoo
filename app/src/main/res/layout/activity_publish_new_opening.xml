@@ -69,11 +69,11 @@
                 android:textSize="24sp" />
 
             <Spinner
-            android:id="@+id/recruitment_place_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="center_horizontal"
-            android:spinnerMode="dropdown" />
+                android:id="@+id/recruitment_place_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
+                android:spinnerMode="dropdown" />
         </LinearLayout>
 
         <TextView
@@ -128,7 +128,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:text="Retrieve file from saved database?"
+            android:contentDescription="@string/retrieve_saved_post_button"
+            android:text="@string/retrieve_saved_post"
             android:textAllCaps="false"
             android:textColor="@color/colorPrimaryDark" />
     </LinearLayout>

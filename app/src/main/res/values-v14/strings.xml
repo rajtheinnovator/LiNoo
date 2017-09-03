@@ -2,4 +2,8 @@
 <resources>
     <string name="dialog_alert">Discard Alert!</string>
     <string name="sure_to_exit_message">Are you sure you want to exit?</string>
+    <string name="retrieve_saved_post">Retrieve file from saved database?</string>
+    <string name="button_for_sending_reset_password_instruction">Button for sending password reset instructions</string>
+    <string name="button_for_sign_up">SignUp button</string>
+    <string name="button_for_saving_user_profile_data">Save User Profile data</string>
 </resources>
