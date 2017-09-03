@@ -12,18 +12,19 @@ import android.provider.BaseColumns;
  * at the link: https://github.com/rajtheinnovator/Project-2-ShowMyShow/
  */
 
-public class DriveContract {
-
+public final class DriveContract {
 
     public static final String CONTENT_AUTHORITY = "com.enpassio.linoo";
-
     /**
      * Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
      * the content provider.
      */
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-
     public static final String PATH_DRIVES = "drives";
+
+    private DriveContract() {
+        //suppress constructor
+    }
 
     /**
      * Inner class that defines constant values for the drive database table.
