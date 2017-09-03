@@ -5,11 +5,11 @@
     <item
         android:id="@+id/action_user_profile"
         android:orderInCategory="1"
-        android:title="user profile"
+        android:title="@string/action_user_profile"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_sign_out"
         android:orderInCategory="100"
-        android:title="sign out"
+        android:title="@string/action_signout"
         app:showAsAction="never" />
 </menu>

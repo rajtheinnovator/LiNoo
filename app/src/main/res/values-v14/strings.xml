@@ -6,4 +6,10 @@
     <string name="button_for_sending_reset_password_instruction">Button for sending password reset instructions</string>
     <string name="button_for_sign_up">SignUp button</string>
     <string name="button_for_saving_user_profile_data">Save User Profile data</string>
+    <string name="fab_for_new_post_creation">FAB for publishing a new post</string>
+    <string name="user_name_hint">your name</string>
+    <string name="hint_user_city">your city</string>
+    <string name="heading_upcoming_drive">Upcoming Drives</string>
+    <string name="action_user_profile">user profile</string>
+    <string name="action_signout">sign out</string>
 </resources>

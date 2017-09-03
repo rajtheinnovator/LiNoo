@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="16dp"
-        android:text="Upcoming Drives"
+        android:text="@string/heading_upcoming_drive"
         android:textColor="@color/color_text_description"
         android:textSize="24sp" />
 
@@ -40,6 +40,7 @@
             android:layout_alignParentRight="true"
             android:layout_margin="@dimen/fab_margin"
             android:background="@color/colorPrimaryDark"
+            android:contentDescription="@string/fab_for_new_post_creation"
             android:elevation="12dp"
             android:src="@drawable/button_add" />
     </RelativeLayout>

@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/color_edit_text_underline"
-            android:hint="your name" />
+            android:hint="@string/user_name_hint" />
 
         <TextView
             android:id="@+id/user_email"
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/color_edit_text_underline"
-            android:hint="your city" />
+            android:hint="@string/hint_user_city" />
 
         <TextView
             android:id="@+id/user_city"
@@ -56,7 +56,7 @@
             android:layout_margin="8dp"
             android:background="@color/color_button"
             android:contentDescription="@string/button_for_saving_user_profile_data"
-            android:text="Save"
+            android:text="@string/button_save"
             android:textAllCaps="false"
             android:textColor="@color/color_button_text" />
     </LinearLayout>

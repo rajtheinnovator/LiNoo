@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/color_edit_text_underline"
-            android:hint="Email"
+            android:hint="@string/hint_email"
             android:inputType="textEmailAddress" />
 
         <EditText
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/color_edit_text_underline"
-            android:hint="Password"
+            android:hint="@string/hint_password"
             android:inputType="textPassword" />
 
         <Button
